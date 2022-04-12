@@ -1,0 +1,8 @@
+package !!!PACKAGE!!!
+
+import (
+	"testing"
+)
+
+func Test!!!UPCASE_PACKAGE!!!(t *testing.T) {
+}
