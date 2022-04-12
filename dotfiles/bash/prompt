@@ -1,0 +1,42 @@
+ONAN_PS1='\[\033[01;34m\]\w\[\033[00m\]'
+OTHER_PS1='\[\033[01;33m\]\w\[\033[00m\]'
+if [ "$(hostname)" = "onan" ]; then
+  BASE_PS1=$ONAN_PS1
+elif [ "$(hostname)" = "psanford-ThinkPad-T480s" ]; then
+  BASE_PS1=$ONAN_PS1
+else
+  BASE_PS1=$OTHER_PS1
+fi
+PS1="$BASE_PS1\\$ "
+DEFAULT_PROMPT=$PS1
+
+function simple_prompt() {
+  PS1='$ '
+}
+
+function normal_prompt() {
+  PS1=$DEFAULT_PROMPT
+}
+
+# If exec'ed into an aws_vault environment
+if [ -n "${AWS_VAULT}" ] ; then
+  echo -e "$(tput setab 1)In aws-vault env ${AWS_VAULT}$(tput sgr0)"
+  export PS1="${BASE_PS1} "'(${AWS_VAULT})\$ '
+fi;
+
+function awsesh_profile_prompt() {
+  if [ $AWSESH_SESSION_EXPIRATION -gt $(date +%s) ]; then
+    echo -n "$AWSESH_PROFILE"
+  else
+    echo -n "EXPIRED"
+  fi
+}
+
+if [ -n "${AWSESH_PROFILE}" ] ; then
+  echo -e "$(tput setab 1)In awsesh env ${AWSESH_PROFILE}$(tput sgr0)"
+  export PS1="${BASE_PS1} "'($(awsesh_profile_prompt))\$ '
+fi;
+
+
+# Red prompt
+# PS1='\[\033[01;31m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\[\033[00m\]\$ '

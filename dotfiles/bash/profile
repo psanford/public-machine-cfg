@@ -1,0 +1,45 @@
+# shared profile settings for bashrc and .profile
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [ -d "$HOME/lib/gotools" ] ; then
+    PATH="$HOME/lib/gotools:$PATH"
+fi
+
+if [ -d "${HOME}/lib/go/bin" ]; then
+  PATH="$PATH:${HOME}/lib/go/bin"
+fi
+
+if [ -d "${HOME}/lib/node/bin" ]; then
+  PATH="$PATH:${HOME}/lib/node/bin"
+fi
+
+if [ -d "/opt/google-cloud-sdk/bin" ]; then
+  PATH="$PATH:/opt/google-cloud-sdk/bin"
+fi
+
+if [ -d "${HOME}/lib/rust/usr/local/bin" ]; then
+  PATH="$PATH:${HOME}/lib/rust/usr/local/bin"
+fi
+
+if [ -d "${HOME}/.cargo/bin" ]; then
+  PATH="$PATH:${HOME}/.cargo/bin"
+fi
+
+if [ -e "/run/user/1000/ssh-agent.socket" ] && [ -z "$SSH_AUTH_SOCK" ]; then
+  export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket;
+fi
+
+if [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]; then
+  . ${HOME}/.nix-profile/etc/profile.d/nix.sh
+fi
+
+export GOPATH="${HOME}/projects/go"
+export RUST_SRC_PATH="${HOME}/lib/rust/usr/local/src/rustc"
+
+export DONUTDB_DYNAMODB_LOCAL_DIR="${HOME}/lib/dynamodb_local"

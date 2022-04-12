@@ -1,0 +1,572 @@
+go_path_here() {
+  export GOPATH=$(pwd)
+}
+
+go_path_in_tree() {
+  local dir=`pwd`
+  local found=0
+
+  while [ "$dir" != "/" ]; do
+    dir=`dirname "$dir"`;
+    if [ -d "$dir/src" -a -d "$dir/pkg" -a -d "$dir/bin" ]; then
+      found=1;
+      break;
+    fi;
+  done
+
+  if [ $found -eq 0 ]; then
+    dir=`pwd`
+    while [ "$dir" != "/" ]; do
+      dir=`dirname "$dir"`;
+      base=`basename $dir`;
+
+      if [ -d "$dir/src" -a "$base" = "go" ]; then
+        found=1;
+        break;
+      fi;
+    done
+  fi;
+
+  if [ $found -eq 1 ]; then
+    export GOPATH="$dir"
+    echo "GOPATH is now $dir"
+  else
+    echo "No GOPATH found"
+  fi
+}
+
+unalias ls 2>&1 > /dev/null
+alias ls='ls --color=auto'
+
+alias ec='emacsclient -n'
+alias ect='TERM=xterm-256color emacsclient -nw'
+
+alias bc="bc -l"
+
+alias command_grep="compgen -ac | grep"
+
+alias dos2unix='perl -pi -e "tr/\r//d"'
+alias unix2dos='perl -pi -e "s/\n$/\r\n/g"'
+alias mac2unix='perl -pi -e "tr/\r/\n/d"'
+alias strip-utf8-bom='perl -CD -pi -e "tr/\x{feff}//d"'
+alias findgrep="find . -print0 | xargs -0 grep"
+
+alias yubi-code='ykman oath code'
+
+alias transmission=qbittorrent
+alias bittorrent=qbittorrent
+
+pbcopy() {
+  dest=${1-primary}
+  xclip -selection $dest
+}
+
+pbpaste() {
+  dest=${1-primary}
+  xclip -selection $dest -o
+}
+
+
+baud_rates() {
+  echo "2400
+4800
+9600
+19200
+38400
+57600
+115200";
+}
+
+shared_secret_generator() {
+  len=${1-16}
+  pwgen -c -B -n -s $len
+}
+
+alias private_vim="vim -i NONE"
+alias vim_private="vim -i NONE"
+
+private_bash() {
+  unset HISTFILE
+  PS1='\[\033[01;30m\]\w\[\033[00m\]\$ '
+}
+
+load_aws_creds_into_env() {
+  creds=$AWS_CREDENTIAL_FILE
+  if [ -z "$creds" -a -n "$NB_AWS_CREDENTIAL_FILE" ]; then
+    creds=$NB_AWS_CREDENTIAL_FILE;
+  fi;
+
+  if [ -z "$creds" ]; then
+    echo 'Could not find credential file!'
+  else
+    export AWS_ACCESS_KEY_ID=$(sed -nr 's/AWSAccessKeyId=(.*)/\1/p' $creds)
+    export AWS_SECRET_ACCESS_KEY=$(sed -nr 's/AWSSecretKey=(.*)/\1/p' $creds)
+  fi
+}
+
+hexcalc() {
+  echo "obase=16;ibase=16;$@" | bc;
+}
+
+x509_unbundle() {
+  if [ -z "$1" ]; then
+    echo "usage: x509_unbundle <chain.pem>"
+    return
+  fi
+  openssl crl2pkcs7 -nocrl -certfile $1 | openssl pkcs7 -print_certs -text -noout
+}
+
+alias ssh_no_key="ssh -o PubkeyAuthentication=no"
+
+pms_aws_mfa() {
+  if [ -z "$1" ]; then
+    echo "usage: pms_aws_mfa <code-from-token>"
+    return
+  fi
+
+  local JSON=""
+  local session_token=""
+  local key_id=""
+  local secret_key=""
+
+  JSON=$(aws sts get-session-token --serial-number arn:aws:iam::814547155292:mfa/psanford --token-code $1)
+
+  session_token="$(echo $JSON | jq .Credentials.SessionToken)"
+  key_id="$(echo $JSON | jq .Credentials.AccessKeyId)"
+  secret_key="$(echo $JSON | jq .Credentials.SecretAccessKey)"
+
+  echo "export AWS_ACCESS_KEY_ID=$key_id"
+  echo "export AWS_SECRET_ACCESS_KEY=$secret_key"
+  echo "export AWS_SESSION_TOKEN=$session_token"
+}
+
+awkn() {
+  AAA=$1
+  awk "{print \$$AAA}"
+}
+
+mac-oui-lookup() {
+  if [ -z "$1" ]; then
+    echo "usage: mac-oui-lookup <mac>"
+    return
+  fi
+
+  OUI="$(echo $1 | perl -ple 's/[-:_]//g; s/(.{6}).*/\1/g;  $_ = uc')"
+
+  ## /var/lib/ieee-data/oui.txt comes from ieee-data package + `update-oui`
+  grep "$OUI" /var/lib/ieee-data/oui.txt -B 1 -A 3
+}
+
+neo1() {
+  unset GPG_AGENT_INFO
+  export GNUPGHOME="$(mktemp -d)"
+  chmod 700 $GNUPGHOME
+
+  ASC="$(mktemp)"
+
+  cat > $ASC <<EOF
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v2
+
+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
+7x68uw64FIQCM5Bjc6QQQBRO+6ZKyFow8fQ=
+=Yh24
+-----END PGP PUBLIC KEY BLOCK-----
+EOF
+
+  gpg2 --import $ASC
+  gpg2 --card-status
+
+  rm $ASC
+}
+
+yk2() {
+  unset GPG_AGENT_INFO
+  export GNUPGHOME="$(mktemp -d)"
+  chmod 700 $GNUPGHOME
+
+  ASC="$(mktemp)"
+
+  cat > $ASC <<EOF
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v2
+
+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
+DK+lZYvFekPyKO6htOgFH1ukRrEFYG+Okw==
+=/k4w
+-----END PGP PUBLIC KEY BLOCK-----
+EOF
+
+  gpg2 --import $ASC
+  gpg2 --card-status
+
+  rm $ASC
+}
+
+alias kqed='mplayer http://streams2.kqed.org:80/kqedradio'
+alias kalw='mplayer http://live.str3am.com:2430/'
+alias sfpd1="mplayer http://stream.scansf.com:8000/scansf.996xt"
+alias sfpd2="mplayer http://stream.scansf.com:8000/scansf.hp"
+alias sffd1="mplayer http://stream.scansf.com:8000/scansf.sffd"
+
+hourly_news() {
+  mplayer "$(curl http://api.npr.org/v1/stations/1/newscasts/ | sed -n -e  's/.*<mp3>\(.*\)<\/mp3>.*/\1/p')"
+}
+
+atomic_accidents() {
+	start=$1
+	if [ -z $start ]; then
+		start=$((1 + RANDOM % 90))
+	fi
+	end=$(($start + 5))
+	files=""
+	for i in $(seq --format '%03.f' $start $end); do
+		files="$files $HOME/media/audiobooks/atomic_accidents/9468-D01-$i.mp3"
+	done
+	mplayer $files
+}
+
+itunes_podcast_url() {
+  url=$1
+
+  if [ -z $url ]; then
+      echo "usage: itunes_podcast_url <itunes_url>" >&2
+      return
+  fi
+
+  # url should look like: 'https://itunes.apple.com/us/podcast/eucharist/id1170259574'
+  curl -A 'iTunes/10.1 (Windows; U; Microsoft Windows XP Home Edition Service Pack 2 (Build 2600)) DPI/96' -s $url | \
+      grep feed-url | \
+      head -1 | \
+      sed -re 's/.*feed-url="([^"]+)".*/\1/'
+}
+
+
+alias ec="emacsclient -n"
+
+alias lxc-ls="lxc-ls -f"
+
+alias machine-cfg="cd ${HOME}/projects/machine-cfg"
+
+_lxc_stopped_completion(){
+  local cur prev opts
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  local containers=$(\lxc-ls --stopped)
+  COMPREPLY=( $(compgen -W "${containers}" -- ${cur}) )
+  return 0;
+}
+
+complete -F _lxc_stopped_completion lxc-start
+
+_lxc_running_completion(){
+  local cur prev opts
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  local containers=$(\lxc-ls --running)
+  COMPREPLY=( $(compgen -W "${containers}" -- ${cur}) )
+  return 0;
+}
+
+complete -F _lxc_running_completion lxc-stop
+complete -F _lxc_running_completion lxc-attach
+
+s3url() {
+  if [ -z "$1" ]; then
+    echo "usage: s3url <s3://somepath>"
+    return
+  fi
+
+
+  echo "$1" | sed -r -e 's|^s3://([^/]+)/(.*)|https://\1.s3.amazonaws.com/\2|'
+}
+
+alias awkward='awk -v "FS=\x1F" -v "RS=\x1E"'
+
+ecnox() {
+  TERM=xterm-256color
+  emacsclient -nw "$@"
+}
+
+aws-csv2creds() {
+  if [ -z "$1" ]; then
+    echo "usage: aws-csv2creds <creds.csv>";
+    return;
+  fi;
+  awk -F , 'NR!=1 { print "AWSAccessKeyId="$1"\nAWSSecretKey="$2 }' "$1"
+}
+
+aws-csv2credsenv() {
+  if [ -z "$1" ]; then
+    echo "usage: aws-csv2credsenv <creds.csv>";
+    return;
+  fi;
+  awk -F , 'NR!=1 { print "export AWS_ACCESS_KEY_ID="$1"\nexport AWS_SECRET_ACCESS_KEY="$2 }' "$1"
+}
+
+aws-csv2profile() {
+  if [ -z "$1" ]; then
+    echo "usage: aws-csv2profile <creds.csv>";
+    return;
+  fi;
+  awk -F , 'NR!=1 { print "[default]\naws_access_key_id="$2"\naws_secret_access_key="$3 }' "$1"
+}
+
+pmpeach() {
+  for f in "$@"; do
+    echo "start $f";
+    pmplast "$f"
+    echo "done $f"
+  done
+}
+
+pmplast() {
+  f=$1
+  pos=${2-2}
+  pmpn $pos $f -start -20
+}
+
+pmpn() {
+  local pos="${1}"
+  local geo=""
+
+  case $pos in
+    1)
+      geo="50%x50%+0%+5%"
+      ;;
+    2)
+      geo="50%x50%+0%-0%"
+      ;;
+    3)
+      geo="50%x50%-0%+5%"
+      ;;
+    4)
+      geo="50%x50%-0%-0%"
+      ;;
+  esac
+
+  mpv --geometry=$geo "${@:2}"
+}
+
+pmp1() {
+  pmpn 1 "$1"
+}
+pmp2() {
+  pmpn 2 "$1"
+}
+pmp3() {
+  pmpn 3 "$1"
+}
+pmp4() {
+  pmpn 4 "$1"
+}
+
+loop_until_fail() {
+  i=0;
+  echo "running" $@;
+  while $@; do
+      echo "[$(date +%H:%M:%S.%N)] iteration:" $i;
+      i=$(($i+1));
+  done
+}
+
+loop_until_success() {
+  i=0;
+  echo "running" $@;
+  while ! $@; do
+      echo "[$(date +%H:%M:%S.%N)] iteration:" $i;
+      i=$(($i+1));
+  done
+}
+
+loop_59() {
+  for i in $(seq 1 59); do
+    echo "$i: $@"
+    $@
+    sleep 59
+  done
+}
+
+loop_600() {
+  for i in $(seq 1 59); do
+    echo "$i: $@"
+    $@
+    sleep 599
+  done
+}
+
+ec2price() {
+  if [ $# -gt 0 ]; then
+    /home/psanford/projects/ec2price/ec2price "$@"
+  else
+    if [ -e /tmp/ec2price ]; then
+      sinceMtime=$(( $(date +%s) - $(stat -c %Y /tmp/ec2price) ))
+      if [ $sinceMtime -lt 86400 ]; then
+        cat /tmp/ec2price
+        return
+      fi
+    fi
+    /home/psanford/projects/ec2price/ec2price | tee /tmp/ec2price
+  fi
+}
+
+ec2price-sqlite() {
+  DBFILE=/tmp/.ec2-price.db
+  if [ ! -e "$DBFILE" ]; then
+    /home/psanford/projects/ec2price/ec2price --csv | sed '/^$/d' > /tmp/.ec2-price.csv
+    sqlite3 "$DBFILE" <<EOF
+.mode csv
+.headers on
+.import /tmp/.ec2-price.csv ec2
+EOF
+  fi
+  sqlite3 "$DBFILE"
+}
+
+ppxml() {
+  xmllint --format "$@"
+}
+
+devshell() {
+  if [ -z "$DEV_VM" ]; then
+    echo "no DEV_VM set" >&2;
+    return
+  fi
+  ip=$(lxc list -c4 --format csv $DEV_VM | cut -d' ' -f1)
+  type=$(lxc list -ct --format csv $DEV_VM)
+  if [ "$1" = "--ip" ]; then
+    echo $ip
+  else
+    if [ "$type" = "VIRTUAL-MACHINE" ]; then
+      ssh ubuntu@$ip
+    else
+      lxc exec $DEV_VM --user 1000 --env HOME=/home/ubuntu bash
+    fi
+  fi
+}
+
+count() {
+  I=$1
+  while [ $I -le $2 ];
+    do echo $I
+    I=$((I+1))
+  done
+}
+
+gooddate() {
+  LC_TIME=c date "$@"
+}
+
+nix-enable() {
+  source /home/psanford/.nix-profile/etc/profile.d/nix.sh
+}
+
+about-me() {
+  cat ~/.aboutme
+}
