@@ -1,0 +1,11 @@
+! allow for meta-/ for filename completions (etc)
+! this also makes terminal emacs happy (also requires inputrc changes)
+xterm*metaSendsEscape: true
+XTerm*eightBitInput: false
+xterm*background: black
+xterm*foreground: lightgrey
+
+URxvt*meta8: false
+URxvt*modifier: alt
+
+Emacs.font: xft:-*-DejaVu Sans Mono-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1
