@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+set -o pipefail
+
+function usage {
+	cat <<-END >&2
+		USAGE: replcode [-d] <old_pattern> <new_pattern>
+		                -d               # dry run
+		  eg,
+		        replcode foo bar         # replace all instances of 'foo' with 'bar'
+		END
+		exit 1
+}
+
+opt_dry=0;
+
+### parse options
+while getopts d opt
+do
+	case $opt in
+	d)	opt_dry=1 ;;
+	h|?)	usage ;;
+	esac
+done
+shift $(( $OPTIND - 1 ))
+
+old_pattern=$1
+new_pattern=$2
+
+if [ -z "$new_pattern" ]; then
+  usage
+fi
+
+for f in $(rg --files); do
+  echo "check $f" >&2
+  dir=$(dirname $f)
+  fname=$(basename $f)
+  tmp_file="$(mktemp -u -p $dir ".$fname-replcode-XXXXXXXXXX")"
+  if [ $opt_dry -eq 1 ]; then
+    rg -n $old_pattern -r $new_pattern $f > $tmp_file
+    if [ -s $tmp_file ]; then
+      echo $f
+      cat $tmp_file
+    fi
+    rm $tmp_file
+  else
+    rg --passthru -N $old_pattern -r $new_pattern $f > $tmp_file
+    if ! diff $f $tmp_file > /dev/null; then
+      echo $f changed
+      mv $tmp_file $f
+    else
+      rm $tmp_file
+    fi
+  fi
+done

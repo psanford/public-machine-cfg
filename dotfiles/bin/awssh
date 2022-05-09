@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+TMPFILE=$(tempfile -d $HOME/.awsesh -p ctrl_ -s .sock)
+
+rm $TMPFILE
+
+ssh -t  -R$TMPFILE:/home/psanford/.awsesh/.control.sock "$@" "export AWSESH_SOCKET=$TMPFILE; bash -l"

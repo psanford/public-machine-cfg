@@ -1,0 +1,4 @@
+#!/bin/bash
+
+
+jq -r  '"  export AWS_ACCESS_KEY_ID=\(.Credentials.AccessKeyId)\n  export AWS_SECRET_ACCESS_KEY=\(.Credentials.SecretAccessKey)\n  export AWS_SESSION_TOKEN=\(.Credentials.SessionToken)"'

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+while read COMMITSHA; do
+  CURRENTSIZE=$(git ls-tree -lrt $COMMITSHA | grep blob | sed -E "s/.{53} *([0-9]*).*/\1/g" | paste -sd+ - | bc)
+  PREVSIZE=$(git ls-tree -lrt $COMMITSHA^ | grep blob | sed -E "s/.{53} *([0-9]*).*/\1/g" | paste -sd+ - | bc)
+  echo -n "$COMMITSHA: "
+  echo "$CURRENTSIZE - $PREVSIZE" | bc
+done

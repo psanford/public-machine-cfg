@@ -1,0 +1,15 @@
+#!/bin/bash
+
+tmp_name="$(tempfile)"
+
+cp $@ $tmp_name
+chmod 600 $tmp_name
+
+echo "sha256:"
+ssh-keygen -lv -E sha256 -f "$tmp_name"
+echo "md5:"
+ssh-keygen -l -E md5 -f "$tmp_name"
+echo "public key"
+ssh-keygen -y -f "$tmp_name"
+
+rm $tmp_name

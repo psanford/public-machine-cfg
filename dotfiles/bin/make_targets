@@ -1,0 +1,3 @@
+#!/bin/sh
+
+make -pRrq | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($1 !~ "^[#.]") {print $1}}'  | egrep -v -e '^[^[:alnum:]]'

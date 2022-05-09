@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+COMM=$1
+
+if [ -z "$COMM"] ; then
+  echo "usage: $0 <name_of_process>" >&2
+  exit 1
+fi
+
+script=''
+
+read -r -d '' script <<EOF
+tracepoint:syscalls:sys_enter_read /comm =="$COMM"/ {
+  if (args->fd == 0) {
+    @read_buf=args->buf;
+    @read_fd=args->fd;
+  }
+}
+
+tracepoint:syscalls:sys_exit_read /comm =="$COMM"/ {
+  time("%H:%M:%S ");
+  printf("exit fd=%d\n", @read_fd);
+  if (@read_fd >= 0 && args->ret > 0) {
+    printf("read  pid=%d fd=%d <%s>\n",  pid, @read_fd, str(@read_buf, args->ret));
+    @read_buf=0;
+    @read_fd=-1;
+  }
+}
+
+tracepoint:syscalls:sys_enter_write /comm =="$COMM"/ {
+  if (args->fd <= 2) {
+    time("%H:%M:%S ");
+    printf("write pid=%d fd=%d <%s>\n", pid, args->fd, str(args->buf, args->count));
+  }
+}
+
+EOF
+
+bpftrace -e "$script"

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+/home/psanford/projects/thirdparty/FlameGraph/stackcollapse-perf.pl $1 | /home/psanford/projects/thirdparty/FlameGraph/flamegraph.pl

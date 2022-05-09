@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+if ARGV.length < 3
+  STDERR.puts("usage: #{$0} 'line_match' <perf.script.file> <symbol_file>")
+  STDERR.puts("line_match is a string submatch for a line line:")
+  STDERR.puts
+  STDERR.puts("	          40b1c5 [unknown] (/usr/local/bin/foobar (deleted))")
+  STDERR.puts
+  STDERR.puts("symbol_file is the output of `objdump -Tt /path/to/executable`")
+
+  exit 1
+end
+
+line_match = ARGV[0]
+trace_file = ARGV[1]
+symbol_file = ARGV[2]
+
+symbols = []
+
+File.open(symbol_file) do |f|
+  f.each_line do |l|
+    l.strip!
+
+    fields = l.split(/\s+/)
+    # looking for lines like:
+    # 000000000042d620 g     F .text	000000000000012b              runtime.Stack
+    if fields.length < 6
+      next
+    end
+
+    if fields[3] != '.text'
+      next
+    end
+
+
+    # append addr and function_name
+    symbols << [fields[0].to_i(16), fields[5]]
+  end
+  symbols << [0xffffffffffffffff, 'END_SYMBOL']
+end
+
+symbols.sort! {|a,b| a[0] <=> b[0] }
+
+File.open(trace_file) do |f|
+  f.each_line do |l|
+
+    if l.include?(line_match)
+      parts = l.strip.split(/\s+/)
+      addr = parts[0].to_i(16)
+      idx = symbols.bsearch_index {|s| s[0] >= addr }
+      if idx
+       print l.sub("[unknown]", symbols[idx-1][1])
+      else
+       print l
+      end
+    else
+     print l
+    end
+  end
+end

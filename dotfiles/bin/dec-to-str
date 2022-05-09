@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+ARGV.each do |d|
+  print d.gsub(/[^0-9]/, '').to_i.chr
+end
+
+puts

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+DIR=$1
+
+if [ ! -d "$DIR" ]; then
+  echo "usage: cleanup_dir <dir>" >&2
+  echo "'$1' is not a directory" >&2
+  exit 1
+fi
+
+# delete files older than 7 days
+find $DIR -type f -mtime +7 -exec rm -f '{}' \; >> /tmp/cleanup_log 2>&1
+
+# delete broken symlinks, don't look in hidden directories
+find $DIR -not -path '*/\.*' -type l -xtype l -exec rm -f '{}' \; >> /tmp/cleanup_log 2>&1
+
+# delete empty directories
+find $DIR -depth -mindepth 1 -type d -empty -delete >> /tmp/cleanup_log 2>&1

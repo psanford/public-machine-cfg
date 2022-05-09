@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ $# != 2 ]; then
+  echo "usage: $0 <binary> [function_name]" >&2
+  exit 1
+fi
+
+# or
+# objdump -d $1 | awk -F"\n" -v RS="\n\n" '$1 ~ /'"$2"'/'
+
+gdb -batch $1 -ex "disassemble $2"

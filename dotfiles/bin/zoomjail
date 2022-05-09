@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+firejail --profile=/etc/firejail/zoom.profile /opt/zoom/ZoomLauncher "$@"

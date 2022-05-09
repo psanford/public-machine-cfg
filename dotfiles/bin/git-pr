@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Based on
+#   https://gist.github.com/gnarf/5406589
+#   https://gist.github.com/jhnns/d654d9d6da6d3b749986
+#   https://github.com/leahneukirchen/git-merge-pr
+
+set -e
+
+PR=$1
+REMOTE=
+case "$PR" in
+*@*)
+	REMOTE=${PR#*@}
+	PR=${PR%%@*}
+esac
+
+URL=$(git ls-remote --get-url $REMOTE)
+
+PROJECT=${URL%.git}
+PROJECT=${PROJECT##*:}
+PROJECT=${PROJECT#//github.com/}
+
+if [ -z "$PR" ]; then
+	wget -q -O- --header 'Accept: application/json' \
+		"https://api.github.com/repos/${PROJECT}/pulls?direction=asc" |
+		jq -r 'if length > 0
+			then .[] | "\(.number) <\(.user.login)> \(.title)"
+			else "No open pull requests." end'
+	exit $?
+else
+	shift
+fi
+
+BRANCH=pr/$PR
+
+git fetch -fu $REMOTE refs/pull/$PR/head:$BRANCH && \
+git checkout $BRANCH && \
+git config --local --replace branch.$BRANCH.merge refs/pull/$PR/head && \
+git config --local --replace branch.$BRANCH.remote $REMOTE;

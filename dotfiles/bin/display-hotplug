@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+export XAUTHORITY=/home/psanford/.Xauthority
+export DISPLAY=:0.0
+
+grobi -v update
