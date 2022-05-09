@@ -24,3 +24,5 @@
 [include]
   path = ~/.gitconfig.d/local
   path = ~/.gitconfig.d/private
+[init]
+  defaultBranch = main
