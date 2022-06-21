@@ -136,16 +136,6 @@ $(HOME)/.gdbinit: gdbinit/gdbinit
 
 gdbinit: $(HOME)/.gdbinit
 
-
-_upspinfiles=$(shell find upspin -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.upspin/%: upspin/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-upspin: $(patsubst %,$(HOME)/.upspin/%, $(_upspinfiles))
-
 _awsfiles=$(shell find aws -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.aws/%: aws/%
 	mkdir -p $(@D)
@@ -154,15 +144,6 @@ $(HOME)/.aws/%: aws/%
 	chmod 400 $@
 
 aws: $(patsubst %,$(HOME)/.aws/%, $(_awsfiles))
-
-
-$(HOME)/.config/i3/config: i3/config
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-i3: $(HOME)/.config/i3/config
 
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)

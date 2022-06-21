@@ -4,7 +4,7 @@
 ;; don't split vertically for (display-buffer) (e.g. compilation-mode, diff-mode, etc)
 (setq split-height-threshold nil)
 
-(setq emacs-dir "~/projects/machine-cfg/dotfiles/emacs/")
+(setq emacs-dir "~/projects/public-machine-cfg/dotfiles/emacs/")
 
 (setq company-go-gocode-command "gocode")
 
@@ -13,10 +13,8 @@
 (dolist (r `(
              (?e (file . ,(concat emacs-dir "init.el")))
              (?f (file . "~/projects/foo/foo.go"))
-             (?m (file . "~/projects/machine-cfg"))
+             (?m (file . "~/projects/public-machine-cfg"))
              (?o (file . "~/projects/machine-cfg/puppet/onan/onan.pp"))
-             (?t (file . "~/projects/machine-cfg/puppet/psanford-ThinkPad-T480s/psanford-ThinkPad-T480s.pp"))
-             (?u (file . "~/src/chef-repo/site-cookbooks/users/files/default/users.json"))
              (?p (file . ,(concat emacs-dir "lisp/psanford.el")))))
   (set-register (car r) (cadr r)))
 
@@ -50,7 +48,8 @@
         magit-insert-unpushed-to-pushremote))
 
 ;; don't touch my buffers, magit!
-(setq magit-auto-revert-mode nil)
+(with-eval-after-load 'magit-autorevert
+  (magit-auto-revert-mode -1))
 
 (add-hook 'git-commit-mode-hook 'git-commit-turn-on-flyspell)
 
