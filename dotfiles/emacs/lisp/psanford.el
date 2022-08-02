@@ -13,6 +13,7 @@
 (dolist (r `(
              (?e (file . ,(concat emacs-dir "init.el")))
              (?f (file . "~/projects/foo/foo.go"))
+             (?j (file . "~/projects/machine-cfg/nixos/jerubbaal/configuration.nix"))
              (?m (file . "~/projects/public-machine-cfg"))
              (?o (file . "~/projects/machine-cfg/puppet/onan/onan.pp"))
              (?p (file . ,(concat emacs-dir "lisp/psanford.el")))))
