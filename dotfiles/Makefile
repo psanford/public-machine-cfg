@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs ssh git upspin xresources xmonad inputrc profile aws grobi gdbinit vim i3 xprofile
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -39,15 +39,6 @@ $(HOME)/.emacs.d/%: emacs/%
 
 emacs: $(patsubst %,$(HOME)/.emacs.d/%, $(_emacsfiles))
 
-_sshfiles=$(shell find ssh -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.ssh/%: ssh/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-ssh: $(patsubst %,$(HOME)/.ssh/%, $(_sshfiles))
-
 $(HOME)/.config/systemd/user/ssh-agent.service: ssh-agent/ssh-agent.service
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -72,19 +63,7 @@ $(HOME)/.gitconfig: git/config
 	mv -f $@.tmp $@
 	chmod 400 $@
 
-$(HOME)/.gitconfig.d/local: git/config.$(shell hostname)
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-$(HOME)/.gitconfig.d/personal: git/config.personal
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-git: $(HOME)/.gitconfig $(HOME)/.gitconfig.d/local $(HOME)/.gitconfig.d/personal
+git: $(HOME)/.gitconfig
 
 $(HOME)/.Xresources: xresources/Xresources
 	cp $< $@.tmp
@@ -120,14 +99,6 @@ $(HOME)/.xprofile: profile/profile
 
 xprofile: $(HOME)/.xprofile
 
-$(HOME)/.config/grobi.conf: grobi/grobi.conf
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-grobi: $(HOME)/.config/grobi.conf
-
 
 $(HOME)/.gdbinit: gdbinit/gdbinit
 	cp $< $@.tmp
@@ -136,16 +107,7 @@ $(HOME)/.gdbinit: gdbinit/gdbinit
 
 gdbinit: $(HOME)/.gdbinit
 
-_awsfiles=$(shell find aws -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.aws/%: aws/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-aws: $(patsubst %,$(HOME)/.aws/%, $(_awsfiles))
-
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs ssh git xresources xmonad upspin grobi aws profile inputrc gdbinit i3 xprofile ssh-agent
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent
