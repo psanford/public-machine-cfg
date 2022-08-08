@@ -215,13 +215,15 @@
 (defun pms-sort ()
   "Sort lines between [ and ]"
   (interactive)
-  (save-excursion
-    (search-backward "[")
-    (forward-line)
-    (let ((beg (point)))
+  (let ((beg) (end) (orig (point)))
+    (save-excursion
+      (search-backward "[")
+      (forward-line)
+      (setq beg (point))
       (search-forward "]")
-      (forward-line -1)
-      (sort-lines nil beg (point)))))
+      (setq end (point)))
+    (sort-lines nil beg end)
+    (goto-char orig)))
 
 (defun pms-save-package-versions ()
   "Save currently installed package version to a file"
