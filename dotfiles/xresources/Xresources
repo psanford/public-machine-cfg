@@ -9,3 +9,5 @@ URxvt*meta8: false
 URxvt*modifier: alt
 
 Emacs.font: xft:-*-DejaVu Sans Mono-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1
+
+#include ".Xresources.d/local"

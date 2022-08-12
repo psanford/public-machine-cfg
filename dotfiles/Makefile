@@ -72,6 +72,14 @@ $(HOME)/.Xresources: xresources/Xresources
 
 xresources: $(HOME)/.Xresources
 
+$(HOME)/.Xresources.d/local: $(shell find xresources.d \( -name $(shell hostname) -o -name default \) -print -quit)
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
+xresources: $(HOME)/.Xresources $(HOME)/.Xresources.d/local
+
 $(HOME)/.vimrc: vim/vimrc
 	cp $< $@.tmp
 	mv -f $@.tmp $@
