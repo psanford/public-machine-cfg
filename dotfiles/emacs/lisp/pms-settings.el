@@ -106,6 +106,9 @@
 ; tail compilation buffers
 (setq compilation-scroll-output t)
 
+; disable popup dialog box
+(setq use-dialog-box nil)
+
 ; find-grep ignore gitfiles
 (require 'grep)
 (grep-apply-setting 'grep-find-command '("find . -path '*/.git' -prune -o -name development.log -prune -o -name test.log -prune -o -type f -exec grep -nH -e  {} /dev/null \\;" . 116))
