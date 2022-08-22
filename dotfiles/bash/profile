@@ -39,7 +39,7 @@ if [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]; then
   . ${HOME}/.nix-profile/etc/profile.d/nix.sh
 fi
 
-export GOPATH="${HOME}/projects/go"
+export GOPATH="${HOME}/.cache/gopath"
 export RUST_SRC_PATH="${HOME}/lib/rust/usr/local/src/rustc"
 
 export DONUTDB_DYNAMODB_LOCAL_DIR="${HOME}/lib/dynamodb_local"
