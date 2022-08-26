@@ -410,3 +410,7 @@
 (rassq-delete-all #'image-mode auto-mode-alist)
 (rassq-delete-all #'doc-view-mode auto-mode-alist)
 (rassq-delete-all #'doc-view-mode-maybe auto-mode-alist)
+
+;; macos specific
+(setq mac-command-modifier 'meta
+      mac-option-modifier 'super)
