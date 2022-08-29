@@ -4,6 +4,8 @@ xterm*metaSendsEscape: true
 XTerm*eightBitInput: false
 xterm*background: black
 xterm*foreground: lightgrey
+! make backspace send ^? not ^H
+xterm.*backarrowKey: false
 
 URxvt*meta8: false
 URxvt*modifier: alt
