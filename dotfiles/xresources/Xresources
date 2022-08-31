@@ -5,7 +5,7 @@ XTerm*eightBitInput: false
 xterm*background: black
 xterm*foreground: lightgrey
 ! make backspace send ^? not ^H
-xterm.*backarrowKey: false
+XTerm*ttyModes: erase ^?
 
 URxvt*meta8: false
 URxvt*modifier: alt

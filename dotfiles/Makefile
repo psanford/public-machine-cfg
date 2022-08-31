@@ -69,6 +69,7 @@ $(HOME)/.Xresources: xresources/Xresources
 	cp $< $@.tmp
 	mv -f $@.tmp $@
 	chmod 400 $@
+	xrdb -merge $@
 
 xresources: $(HOME)/.Xresources
 
