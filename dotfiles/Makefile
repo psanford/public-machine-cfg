@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -108,7 +108,6 @@ $(HOME)/.xprofile: profile/profile
 
 xprofile: $(HOME)/.xprofile
 
-
 $(HOME)/.gdbinit: gdbinit/gdbinit
 	cp $< $@.tmp
 	mv -f $@.tmp $@
@@ -116,7 +115,14 @@ $(HOME)/.gdbinit: gdbinit/gdbinit
 
 gdbinit: $(HOME)/.gdbinit
 
+$(HOME)/.screenrc: screenrc/screenrc
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
+screenrc: $(HOME)/.screenrc
+
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc
