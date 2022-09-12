@@ -58,6 +58,13 @@
 (line-number-mode t)
 (column-number-mode t)
 
+
+;; deal with long lines better
+(global-so-long-mode 1)
+;; from https://200ok.ch/posts/2020-09-29_comprehensive_guide_on_handling_long_lines_in_emacs.html
+(setq-default bidi-paragraph-direction 'left-to-right)
+(setq bidi-inhibit-bpa t)
+
 ; short answers
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -270,7 +277,6 @@
  "/home/psanford/src/credstore" 'nate-brown-js)
 (dir-locals-set-directory-class
  "/home/psanford/src/streamstash" 'nate-brown-js)
-
 
 (dir-locals-set-class-variables
  'gio-android
