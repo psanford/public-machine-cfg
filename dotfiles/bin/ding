@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+count="${1:-5}"
 
 sound=/usr/share/sounds/freedesktop/stereo/complete.oga
 
@@ -7,4 +8,5 @@ if [ -e /run/current-system/sw/share/sounds/freedesktop/stereo/complete.oga ]; t
   sound=/run/current-system/sw/share/sounds/freedesktop/stereo/complete.oga
 fi
 
-for i in $(seq 1 5); do mpv $sound; done
+echo "DING"
+mpv --loop=$(($count - 1)) --really-quiet $sound
