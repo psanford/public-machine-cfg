@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
-for i in $(seq 1 5); do mplayer /usr/share/sounds/freedesktop/stereo/complete.oga; done
+
+sound=/usr/share/sounds/freedesktop/stereo/complete.oga
+
+if [ -e /run/current-system/sw/share/sounds/freedesktop/stereo/complete.oga ]; then
+  sound=/run/current-system/sw/share/sounds/freedesktop/stereo/complete.oga
+fi
+
+for i in $(seq 1 5); do mpv $sound; done
