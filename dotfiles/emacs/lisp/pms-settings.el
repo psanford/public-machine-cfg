@@ -294,4 +294,6 @@
             (when (string-suffix-p ".json" (buffer-file-name))
               (json-error-mode t))))
 
+(setq native-comp-async-report-warnings-errors nil)
+
 (provide 'pms-settings)
