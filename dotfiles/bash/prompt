@@ -1,9 +1,11 @@
-ONAN_PS1='\[\033[01;34m\]\w\[\033[00m\]'
+PRIMARY_PS1='\[\033[01;34m\]\w\[\033[00m\]'
 OTHER_PS1='\[\033[01;33m\]\w\[\033[00m\]'
 if [ "$(hostname)" = "onan" ]; then
-  BASE_PS1=$ONAN_PS1
+  BASE_PS1=$PRIMARY_PS1
 elif [ "$(hostname)" = "jerubbaal" ]; then
-  BASE_PS1=$ONAN_PS1
+  BASE_PS1=$PRIMARY_PS1
+elif [ -e "$HOME/.bash.d/primary_prompt" ]; then
+  BASE_PS1=$PRIMARY_PS1
 else
   BASE_PS1=$OTHER_PS1
 fi
