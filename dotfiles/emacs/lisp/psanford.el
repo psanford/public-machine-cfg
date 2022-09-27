@@ -49,8 +49,7 @@
         magit-insert-unpushed-to-pushremote))
 
 ;; don't touch my buffers, magit!
-(with-eval-after-load 'magit-autorevert
-  (magit-auto-revert-mode -1))
+(magit-auto-revert-mode -1)
 
 (add-hook 'git-commit-mode-hook 'git-commit-turn-on-flyspell)
 
