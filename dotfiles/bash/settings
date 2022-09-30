@@ -13,7 +13,7 @@ HISTTIMEFORMAT='%F %T '
 unset command_not_found_handle
 
 # show clock in 24h mode
-export LC_TIME=en_GB.UTF-8
+export LC_TIME=C
 
 export AWS_VAULT_BACKEND=pass
 export AWS_VAULT_PASS_PREFIX=aws_vault
