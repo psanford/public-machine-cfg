@@ -184,3 +184,7 @@ fi
 if which wormhole-william &>/dev/null ; then
   . <(wormhole-william shell-completion bash)
 fi
+
+if which op &>/dev/null ; then
+  . <(op completion bash)
+fi
