@@ -39,6 +39,18 @@ if [ -n "${AWSESH_PROFILE}" ] ; then
   export PS1="${BASE_PS1} "'($(awsesh_profile_prompt))\$ '
 fi;
 
+function awsesh_profile_prompt() {
+  if [ $AWSSO_SESSION_EXPIRATION -gt $(date +%s) ]; then
+    echo -n "$AWSSO_PROFILE"
+  else
+    echo -n "EXPIRED"
+  fi
+}
+
+if [ -n "${AWSSO_PROFILE}" ] ; then
+  echo -e "$(tput setab 1)In awsesh env ${AWSSO_PROFILE}$(tput sgr0)"
+  export PS1="${BASE_PS1} "'($(awsesh_profile_prompt))\$ '
+fi;
 
 # Red prompt
 # PS1='\[\033[01;31m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\[\033[00m\]\$ '
