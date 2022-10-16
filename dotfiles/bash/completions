@@ -178,6 +178,9 @@ complete -o filenames -F _filepass filepass
 if which awsesh &>/dev/null ; then
   . <(awsesh completion)
 fi
+if which awsso &>/dev/null ; then
+  . <(awsso completion bash)
+fi
 if which aws-buddy &>/dev/null ; then
   . <(aws-buddy completion)
 fi
