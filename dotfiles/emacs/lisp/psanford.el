@@ -314,7 +314,7 @@
 
 (defun pms-wordlist ()
   "Get path to dictionary file."
-  (let (wl (getenv "WORDLIST"))
+  (let ((wl (getenv "WORDLIST")))
     ;; nixos doesn't have /usr/share/dict/words
     (if wl wl
       "/usr/share/dict/words")))
