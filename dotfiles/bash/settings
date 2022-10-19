@@ -15,9 +15,6 @@ unset command_not_found_handle
 # show clock in 24h mode
 export LC_TIME=C
 
-export AWS_VAULT_BACKEND=pass
-export AWS_VAULT_PASS_PREFIX=aws_vault
-export AWS_VAULT_NO_SAVE_SESSION=true
 export AWS_ASSUME_ROLE_TTL=1h
 
 export ANDROID_HOME=~/lib/android-sdk
