@@ -413,3 +413,12 @@
 ;; macos specific
 (setq mac-command-modifier 'meta
       mac-option-modifier 'super)
+
+;; enable exec-path-from-shell on macos
+(use-package exec-path-from-shell
+  :ensure t
+  ;; ns for GNUStep and Cocoa
+  :if (eq window-system 'ns)
+  :config
+  (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
+  (exec-path-from-shell-initialize)))
