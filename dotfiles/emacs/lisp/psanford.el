@@ -421,4 +421,4 @@
   :if (eq window-system 'ns)
   :config
   (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
-  (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
