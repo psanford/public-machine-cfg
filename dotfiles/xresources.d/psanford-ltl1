@@ -1,0 +1,5 @@
+XTerm*renderFont: true
+XTerm*faceName: VeraMono
+XTerm*faceSize: 16
+XTerm.SimpleMenu*font: *-fixed-*-*-*-20-*
+XTerm.SimpleMenu.menuLabel.font: *-fixed-*-*-*-20-*
