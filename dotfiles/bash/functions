@@ -505,15 +505,23 @@ ec2price() {
   if [ $# -gt 0 ]; then
     /home/psanford/projects/ec2price/ec2price "$@"
   else
-    if [ -e /tmp/ec2price ]; then
+    if [ -e ~/.cache/ec2price ]; then
       sinceMtime=$(( $(date +%s) - $(stat -c %Y /tmp/ec2price) ))
       if [ $sinceMtime -lt 86400 ]; then
-        cat /tmp/ec2price
+        cat ~/.cache/ec2price
         return
       fi
     fi
-    /home/psanford/projects/ec2price/ec2price | tee /tmp/ec2price
+    /home/psanford/projects/ec2price/ec2price | tee ~/.cache/ec2price
   fi
+}
+
+ec2price-cached() {
+  if [ -e ~/.cache/ec2price ]; then
+    cat ~/.cache/ec2price
+    return
+  fi
+  /home/psanford/projects/ec2price/ec2price | tee ~/.cache/ec2price
 }
 
 ec2price-sqlite() {
