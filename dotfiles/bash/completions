@@ -191,3 +191,7 @@ fi
 if which op &>/dev/null ; then
   . <(op completion bash)
 fi
+
+if which s5cmd &>/dev/null ; then
+  . <(s5cmd --install-completion)
+fi
