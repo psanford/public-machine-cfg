@@ -1,2 +1,3 @@
 XTerm*faceName: VeraMono
 XTerm*faceSize: 16
+xterm.*backarrowKey: false
