@@ -56,6 +56,8 @@ alias yubi-code='ykman oath code'
 alias transmission=qbittorrent
 alias bittorrent=qbittorrent
 
+alias decolor='sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g"'
+
 pbcopy() {
   dest=${1-primary}
   xclip -selection $dest
