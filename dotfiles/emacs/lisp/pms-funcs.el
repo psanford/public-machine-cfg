@@ -288,5 +288,10 @@
   (interactive)
   (insert "¯\\_(ツ)_/¯"))
 
+(defun pms-remove-ansi-color ()
+  "Remove ansi color control codes from buffer"
+  (interactive)
+  (save-excursion
+    (ansi-color-filter-region (point-min) (point-max))))
 
 (provide 'pms-funcs)
