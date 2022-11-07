@@ -175,6 +175,19 @@ _filepass()
 
 complete -o filenames -F _filepass filepass
 
+function _aws-region_completion() {
+  local cur prev opts
+  # COMP_WORDS is array of all the words typed after the name of the program the compspec belongs to
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  # compreply is the returned list of possible completions
+  COMPREPLY=( $(compgen -W "$(aws-region)" -- $cur ) )
+  return 0
+}
+
+complete -F _aws-region_completion aws-region
+
 if which awsesh &>/dev/null ; then
   . <(awsesh completion)
 fi
