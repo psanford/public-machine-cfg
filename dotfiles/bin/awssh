@@ -2,8 +2,10 @@
 
 set -e
 
-TMPFILE=$(tempfile -d $HOME/.awsesh -p ctrl_ -s .sock)
+TMPFILE_SESH=$(tempfile -d $HOME/.awsesh -p ctrl_ -s .sock)
+TMPFILE_SSO=$(tempfile -d $HOME/.cache/awsso -p awsso.tmp. -s .control.sock)
 
-rm $TMPFILE
+rm $TMPFILE_SESH
+rm $TMPFILE_SSO
 
-ssh -t  -R$TMPFILE:/home/psanford/.awsesh/.control.sock "$@" "export AWSESH_SOCKET=$TMPFILE; bash -l"
+ssh -t  -R$TMPFILE_SESH:/home/psanford/.awsesh/.control.sock -R$TMPFILE_SSO:/home/psanford/.cache/awsso/awsso.control.sock "$@" "export AWSESH_SOCKET=$TMPFILE_SESH; export AWSSO_SOCKET=$TMPFILE_SSO; bash -l"
