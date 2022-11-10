@@ -6,6 +6,8 @@ xterm*background: black
 xterm*foreground: lightgrey
 ! make backspace send ^? not ^H
 XTerm*ttyModes: erase ^?
+! mitigate CVE-2022-45063
+XTerm*allowFontOps: false
 
 URxvt*meta8: false
 URxvt*modifier: alt
