@@ -53,9 +53,6 @@ alias findgrep="find . -print0 | xargs -0 grep"
 
 alias yubi-code='ykman oath code'
 
-alias transmission=qbittorrent
-alias bittorrent=qbittorrent
-
 alias decolor='sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g"'
 
 pbcopy() {

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+CLIENT=qbittorrent
+
+if [[ -n "$1" ]]; then
+  exec $CLIENT "$1"
+fi
+
+echo "Reading from stdin" >&2
+while IFS= read -r line; do
+  entry="$(echo -e "${line}" | sed -e 's/[[:space:]]*$//')"
+  if [[ $entry = magnet:* ]]; then
+    exec $CLIENT "$entry"
+  fi
+done
