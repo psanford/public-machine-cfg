@@ -539,7 +539,7 @@ ec2price() {
     /home/psanford/projects/ec2price/ec2price "$@"
   else
     if [ -e ~/.cache/ec2price ]; then
-      sinceMtime=$(( $(date +%s) - $(stat -c %Y /tmp/ec2price) ))
+      sinceMtime=$(( $(date +%s) - $(stat -c %Y ~/.cache/ec2price) ))
       if [ $sinceMtime -lt 86400 ]; then
         cat ~/.cache/ec2price
         return
