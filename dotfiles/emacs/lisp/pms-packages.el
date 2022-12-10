@@ -32,7 +32,7 @@
                                          xref-find-definitions-other-frame
                                          xref-find-references))
   :config (progn
-            (setq lsp-clients-go-library-directories '("/usr" "/home/psanford/lib"))
+            (setq lsp-clients-go-library-directories '("/usr" "/home/psanford/lib" "/nix"))
             (setq lsp-enable-links nil)
             (setq lsp-enable-indentation nil)
             (setq lsp-gopls-hover-kind "FullDocumentation")
