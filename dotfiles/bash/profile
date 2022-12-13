@@ -31,8 +31,8 @@ if [ -d "${HOME}/.cargo/bin" ] && [[ ":$PATH:" != *":${HOME}/.cargo/bin:"* ]] ; 
   PATH="$PATH:${HOME}/.cargo/bin"
 fi
 
-if [ -e "/run/user/1000/ssh-agent.socket" ] && [ -z "$SSH_AUTH_SOCK" ]; then
-  export SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket;
+if [ -e "/run/user/$(id -u)/ssh-agent.socket" ] && [ -z "$SSH_AUTH_SOCK" ]; then
+  export SSH_AUTH_SOCK=/run/user/$(id -u)/ssh-agent.socket;
 fi
 
 if [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ] ; then
