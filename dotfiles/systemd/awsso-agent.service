@@ -1,0 +1,9 @@
+[Unit]
+Description=Awsso agent server
+
+[Service]
+ExecStart=/home/psanford/bin/awsso server
+Environment=BROWSER=/home/psanford/bin/xdg-open
+
+[Install]
+WantedBy=default.target

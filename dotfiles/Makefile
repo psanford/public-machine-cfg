@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -122,7 +122,19 @@ $(HOME)/.screenrc: screenrc/screenrc
 
 screenrc: $(HOME)/.screenrc
 
+_systemdfiles=$(shell find systemd -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/systemd/user/%: systemd/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 444 $@
+	systemctl --user daemon-reload
+	systemctl --user enable $(@F)
+	systemctl --user start $(@F)
+
+systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
+
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd
