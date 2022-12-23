@@ -191,7 +191,15 @@ mac-oui-lookup() {
   OUI="$(echo $1 | perl -ple 's/[-:_]//g; s/(.{6}).*/\1/g;  $_ = uc')"
 
   ## /var/lib/ieee-data/oui.txt comes from ieee-data package + `update-oui`
-  grep "$OUI" /var/lib/ieee-data/oui.txt -B 1 -A 3
+  FILE=/var/lib/ieee-data/oui.txt
+  if [ ! -e $FILE ]; then
+    FILE=$HOME/.cache/ieee-data/oui.txt
+    if [ ! -e $FILE ]; then
+      mkdir -p $HOME/.cache/ieee-data
+      curl https://standards-oui.ieee.org > $FILE
+    fi
+  fi
+  grep "$OUI" $FILE -B 1 -A 3;
 }
 
 neo1() {
