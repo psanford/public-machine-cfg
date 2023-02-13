@@ -444,7 +444,7 @@ aws-csv2creds() {
     echo "usage: aws-csv2creds <creds.csv>";
     return;
   fi;
-  awk -F , 'NR!=1 { print "AWSAccessKeyId="$1"\nAWSSecretKey="$2 }' "$1"
+  sed 's/\r//' "$1" | awk -F , 'NR!=1 { print "AWSAccessKeyId="$1"\nAWSSecretKey="$2 }'
 }
 
 aws-csv2credsenv() {
@@ -452,7 +452,7 @@ aws-csv2credsenv() {
     echo "usage: aws-csv2credsenv <creds.csv>";
     return;
   fi;
-  awk -F , 'NR!=1 { print "export AWS_ACCESS_KEY_ID="$1"\nexport AWS_SECRET_ACCESS_KEY="$2 }' "$1"
+  sed 's/\r//' "$1" | awk -F , 'NR!=1 { print "export AWS_ACCESS_KEY_ID="$1"\nexport AWS_SECRET_ACCESS_KEY="$2 }'
 }
 
 aws-csv2profile() {
@@ -460,7 +460,7 @@ aws-csv2profile() {
     echo "usage: aws-csv2profile <creds.csv>";
     return;
   fi;
-  awk -F , 'NR!=1 { print "[default]\naws_access_key_id="$2"\naws_secret_access_key="$3 }' "$1"
+  sed 's/\r//' "$1" | awk -F , 'NR!=1 { print "[default]\naws_access_key_id="$2"\naws_secret_access_key="$3 }'
 }
 
 pmpeach() {
