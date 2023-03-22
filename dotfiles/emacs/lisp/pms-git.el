@@ -10,16 +10,16 @@
   (setq url (replace-regexp-in-string ".git$" "" url))
   url)
 
-(defvar pms-gitlab-urls "o"
+(defvar pms-gitlab-urls "gitlab.com"
   "Regex of gitlab urls")
 
-(defun pms-git-browse-file (base-url file-path line-num)
+(defun pms-git-browse-file (base-url rev file-path line-num)
   "Browse to file in github, GHE or gitlab repo"
   (let ((url
          (cond
           ((string-match pms-gitlab-urls base-url)
-           (concat base-url "/-/blob/master/" file-path "#L" line-num))
-          (t (concat base-url "/blob/master/" file-path "#L" line-num)))))
+           (concat base-url "/-/blob/" rev "/" file-path "#L" line-num))
+          (t (concat base-url "/blob/" rev "/" file-path "#L" line-num)))))
     (message url)
     (browse-url url)))
 
@@ -49,11 +49,10 @@
   (interactive)
   (let ((file-path (string-remove-prefix (projectile-project-root) (buffer-file-name)))
         (line-num (format "%d" (line-number-at-pos)))
+        (current-rev (string-trim-right (shell-command-to-string "git rev-parse HEAD")))
         (base-url
-         (replace-regexp-in-string
-          "https://tig." "https://git."
           (pms-git-remote-url-to-web-url
-           (shell-command-to-string "git remote get-url origin")))))
+           (shell-command-to-string "git remote get-url origin"))))
 
     ;; TODO annotate
     (cond ((eq major-mode 'vc-annotate-mode) (message "NOT IMPLEMENED"))
@@ -61,6 +60,6 @@
            (pms-git-browse-commit base-url (pms-git-commit-from-log)))
           ;; in magit-revision mode (viewing a commit)
           (magit-buffer-revision-hash (pms-git-browse-commit base-url magit-buffer-revision-hash))
-          (t (pms-git-browse-file  base-url file-path line-num)))))
+          (t (pms-git-browse-file base-url current-rev file-path line-num)))))
 
 (provide 'pms-git)
