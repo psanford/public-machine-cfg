@@ -31,11 +31,11 @@ import XMonad.Config.Desktop
 
 
 main = do
-    xmonad $ ewmh def {
+    xmonad $ docks $ ewmh def {
         workspaces = myWorkspaces
         -- <+> is the Monoid mappend
         , manageHook = managementHooks <+> manageHook def
-        , layoutHook = avoidStruts $ layoutHook def ||| Accordion ||| Grid
+        , layoutHook = desktopLayoutModifiers $ layoutHook def ||| Accordion ||| Grid
         , modMask = mod4Mask
         , terminal = "xterm"
         } `additionalKeysP` myKeys
