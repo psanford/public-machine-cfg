@@ -54,12 +54,16 @@
           (pms-git-remote-url-to-web-url
            (shell-command-to-string "git remote get-url origin"))))
 
-    ;; TODO annotate
-    (cond ((eq major-mode 'vc-annotate-mode) (message "NOT IMPLEMENED"))
-          ((derived-mode-p 'log-view-mode)
-           (pms-git-browse-commit base-url (pms-git-commit-from-log)))
-          ;; in magit-revision mode (viewing a commit)
-          (magit-buffer-revision-hash (pms-git-browse-commit base-url magit-buffer-revision-hash))
-          (t (pms-git-browse-file base-url current-rev file-path line-num)))))
+    (cond
+     ((eq major-mode 'vc-annotate-mode)
+      (progn
+        (setq current-rev (car (vc-annotate-extract-revision-at-line)))
+        (setq file-path (string-remove-prefix (projectile-project-root) (cdr (vc-annotate-extract-revision-at-line))))
+        (pms-git-browse-file base-url current-rev file-path line-num)))
+     ((derived-mode-p 'log-view-mode)
+      (pms-git-browse-commit base-url (pms-git-commit-from-log)))
+     ;; in magit-revision mode (viewing a commit)
+     (magit-buffer-revision-hash (pms-git-browse-commit base-url magit-buffer-revision-hash))
+     (t (pms-git-browse-file base-url current-rev file-path line-num)))))
 
 (provide 'pms-git)
