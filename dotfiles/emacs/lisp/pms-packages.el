@@ -38,9 +38,9 @@
             (setq lsp-gopls-hover-kind "FullDocumentation")
             (setq lsp-headerline-breadcrumb-enable nil)
             ;; use flycheck, not flymake
-            (setq lsp-prefer-flymake nil)
-            ;; don't show the 'test code lense
-            (assq-delete-all 'test lsp-go-codelenses))
+            (setq lsp-prefer-flymake nil)))
+            ;; ;; don't show the 'test code lense
+            ;; (assq-delete-all 'test lsp-go-codelenses))
 
 (use-package lsp-ui
   :ensure t
