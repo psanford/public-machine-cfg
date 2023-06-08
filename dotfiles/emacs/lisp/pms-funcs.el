@@ -294,4 +294,14 @@
   (save-excursion
     (ansi-color-filter-region (point-min) (point-max))))
 
+(defun pms-insert-buffer-name ()
+  "Insert buffer name"
+  (interactive)
+  (insert (buffer-name)))
+
+(defun pms-insert-file-name ()
+  "Insert file name"
+  (interactive)
+  (insert (buffer-file-name)))
+
 (provide 'pms-funcs)
