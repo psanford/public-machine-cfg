@@ -1,0 +1,8 @@
+[Unit]
+Description=Brightness budy
+
+[Service]
+ExecStart=/home/psanford/bin/brightness-buddy
+
+[Install]
+WantedBy=default.target
