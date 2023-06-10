@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-echo 16 i 2 o $1 p | dc
+upper=${1^^}
+
+echo 16 i 2 o $upper p | dc
