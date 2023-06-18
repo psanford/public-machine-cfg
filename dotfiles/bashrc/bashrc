@@ -126,3 +126,7 @@ BASHD=~/.bash.d
 if [ -e $BASHD/host_${HOSTNAME} ]; then
   . $BASHD/host_${HOSTNAME}
 fi
+
+if [ -e $BASHD/private ]; then
+  . $BASHD/private
+fi
