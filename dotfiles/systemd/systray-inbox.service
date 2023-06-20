@@ -1,0 +1,13 @@
+[Unit]
+Description=Systray inbox
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+ExecStart=/run/current-system/sw/bin/systray-inbox /home/psanford/data/inbox
+Environment=BROWSER=/home/psanford/bin/xdg-open
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target
