@@ -45,7 +45,7 @@ alias ls='ls --color=auto'
 alias ec='emacsclient -n'
 alias ect='TERM=xterm-256color emacsclient -nw'
 
-alias bc="bc -l"
+alias bc="bc -l -q"
 
 alias command_grep="compgen -ac | grep"
 
