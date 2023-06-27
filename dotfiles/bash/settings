@@ -19,6 +19,9 @@ export AWS_ASSUME_ROLE_TTL=1h
 
 export ANDROID_HOME=~/lib/android-sdk
 
+# fix java gui apps in xmonad
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 if [ -e ~/.hosts ]; then
   export HOSTFILE=~/.hosts
 fi
