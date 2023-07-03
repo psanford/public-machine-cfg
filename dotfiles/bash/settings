@@ -19,6 +19,8 @@ export AWS_ASSUME_ROLE_TTL=1h
 
 export ANDROID_HOME=~/lib/android-sdk
 
+export GOKRAZY_PARENT_DIR=~/projects/gokrazy-config
+
 # fix java gui apps in xmonad
 export _JAVA_AWT_WM_NONREPARENTING=1
 
