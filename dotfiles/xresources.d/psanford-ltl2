@@ -3,3 +3,9 @@ XTerm*faceName: VeraMono
 XTerm*faceSize: 14
 XTerm.SimpleMenu*font: *-fixed-*-*-*-20-*
 XTerm.SimpleMenu.menuLabel.font: *-fixed-*-*-*-20-*
+
+! fix xterm small mouse size. Set a cursorTheme explicitly that we know will work
+Xcursor*cursorTheme: DMZ-White
+Xcursor.theme: DMZ-White
+Xterm*cursorTheme: DMZ-White
+Xcursor.size: 48
