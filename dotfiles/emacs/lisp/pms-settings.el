@@ -52,7 +52,8 @@
 
 (projectile-mode)
 (setq projectile-project-search-path '("~/projects/" "~/src/")
-      projectile-switch-project-action 'projectile-dired)
+      projectile-switch-project-action 'projectile-dired
+      projectile-completion-system 'ido)
 
 ; show lines and columns
 (line-number-mode t)
