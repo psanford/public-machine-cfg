@@ -13,7 +13,7 @@ import (
 	_ "github.com/skanehira/gjo"
 	_ "golang.org/x/mobile/cmd/gobind"
 	_ "golang.org/x/mobile/cmd/gomobile"
-	_ "golang.org/x/tools/cmd/godoc"
 	_ "golang.org/x/tools/cmd/goimports"
 	_ "golang.org/x/tools/gopls"
+	_ "golang.org/x/vuln/cmd/govulncheck"
 )
