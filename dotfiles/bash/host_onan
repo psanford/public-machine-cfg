@@ -1,0 +1,4 @@
+# this shouldn't be necessary but for some reason restart xmonad
+# loses this env var from the loginmanager and i don't feel like
+# figuring it out right now
+export SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
