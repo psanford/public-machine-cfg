@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -38,6 +38,16 @@ $(HOME)/.emacs.d/%: emacs/%
 	chmod 444 $@
 
 emacs: $(patsubst %,$(HOME)/.emacs.d/%, $(_emacsfiles))
+
+_gnupgfiles=$(shell find gnupg -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.gnupg/%: gnupg/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 444 $@
+
+gnupg: $(patsubst %,$(HOME)/.gnupg/%, $(_gnupgfiles))
+
 
 $(HOME)/.config/systemd/user/ssh-agent.service: ssh-agent/ssh-agent.service
 	mkdir -p $(@D)
