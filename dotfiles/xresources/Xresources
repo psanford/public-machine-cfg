@@ -4,6 +4,7 @@ xterm*metaSendsEscape: true
 XTerm*eightBitInput: false
 xterm*background: black
 xterm*foreground: lightgrey
+xterm*saveLines: 5000
 ! make backspace send ^? not ^H
 XTerm*ttyModes: erase ^?
 ! mitigate CVE-2022-45063
