@@ -15,7 +15,7 @@
              (?f (file . "~/projects/foo/foo.go"))
              (?j (file . "~/projects/machine-cfg/nixos/jerubbaal/configuration.nix"))
              (?m (file . "~/projects/public-machine-cfg"))
-             (?o (file . "~/projects/machine-cfg/puppet/onan/onan.pp"))
+             (?o (file . "~/projects/machine-cfg/nixos/onan/configuration.nix"))
              (?p (file . ,(concat emacs-dir "lisp/psanford.el")))))
   (set-register (car r) (cadr r)))
 
