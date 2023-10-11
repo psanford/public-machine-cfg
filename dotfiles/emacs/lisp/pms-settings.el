@@ -4,6 +4,9 @@
 
 (setq uniquify-buffer-name-style 'post-forward)
 
+;; disable for tiling window managers
+(setq frame-inhibit-implied-resize t)
+
 ; disable alarms completely
 (setq ring-bell-function 'ignore)
 
