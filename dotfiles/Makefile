@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -48,7 +48,6 @@ $(HOME)/.gnupg/%: gnupg/%
 
 gnupg: $(patsubst %,$(HOME)/.gnupg/%, $(_gnupgfiles))
 
-
 $(HOME)/.config/systemd/user/ssh-agent.service: ssh-agent/ssh-agent.service
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -67,6 +66,15 @@ $(HOME)/.xmonad/%: xmonad/%
 	chmod 400 $@
 
 xmonad: $(patsubst %,$(HOME)/.xmonad/%, $(_xmonadfiles))
+
+_cattfiles=$(shell find catt -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/catt/%: catt/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
+catt: $(patsubst %,$(HOME)/.config/catt/%, $(_cattfiles))
 
 $(HOME)/.gitconfig: git/config
 	cp $< $@.tmp
@@ -147,4 +155,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt
