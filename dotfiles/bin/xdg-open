@@ -4,4 +4,7 @@ if [ -z "$DISPLAY" ]; then
   DISPLAY=:0
 fi
 
-echo -n "$1" | xclip -d $DISPLAY -selection primary; notify-send "URL Copied" "$1"
+echo -n "$1" | xclip -d $DISPLAY -selection primary;
+echo -n "$1" | wl-copy -p
+
+notify-send "URL Copied" "$1"
