@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -75,6 +75,23 @@ $(HOME)/.config/catt/%: catt/%
 	chmod 400 $@
 
 catt: $(patsubst %,$(HOME)/.config/catt/%, $(_cattfiles))
+
+_hyprlandfiles=$(shell find hyprland -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/hypr/%: hyprland/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
+hyprland: $(patsubst %,$(HOME)/.config/hypr/%, $(_hyprlandfiles))
+
+$(HOME)/.config/waybar/config: waybar/waybar.conf
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
+waybar: $(HOME)/.config/waybar/config
 
 $(HOME)/.gitconfig: git/config
 	cp $< $@.tmp
@@ -155,4 +172,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt hyprland waybar
