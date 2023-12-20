@@ -1,0 +1,2 @@
+timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+before-sleep 'swaylock --show-failed-attempts --indicator-idle-visible  --color 121b26 -t'

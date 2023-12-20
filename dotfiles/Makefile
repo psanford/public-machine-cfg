@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -93,6 +93,15 @@ $(HOME)/.config/waybar/config: waybar/waybar.conf
 
 waybar: $(HOME)/.config/waybar/config
 
+_swayidlefiles=$(shell find swayidle -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/swayidle/%: swayidle/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
+swayidle: $(patsubst %,$(HOME)/.config/swayidle/%, $(_swayidlefiles))
+
 $(HOME)/.gitconfig: git/config
 	cp $< $@.tmp
 	mv -f $@.tmp $@
@@ -172,4 +181,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt hyprland waybar
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt hyprland waybar swayidle
