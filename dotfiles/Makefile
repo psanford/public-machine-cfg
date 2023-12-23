@@ -83,6 +83,12 @@ $(HOME)/.config/hypr/%: hyprland/%
 	mv -f $@.tmp $@
 	chmod 400 $@
 
+$(HOME)/.config/hypr/startup.sh: hyprland/startup.sh
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 500 $@
+
 hyprland: $(patsubst %,$(HOME)/.config/hypr/%, $(_hyprlandfiles))
 
 $(HOME)/.config/waybar/config: waybar/waybar.conf
