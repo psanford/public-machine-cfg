@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+filename=$HOME/downloads/screenshot-$(date +%s).png
+grim $filename
+
+echo -n "$filename" | wl-copy -p
+
+notify-send "Screenshot captured" "$filename"
