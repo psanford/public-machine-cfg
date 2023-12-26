@@ -95,7 +95,6 @@
 (add-to-list 'auto-mode-alist '("\\.pl$" . cperl-mode))
 
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
-(add-to-list 'auto-mode-alist '("/nearbuy.conf$" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))

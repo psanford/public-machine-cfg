@@ -42,14 +42,6 @@
     (delete-region beg end)
     (insert decoded)))
 
-(defun pms-kill-external-buffers ()
-  (interactive)
-  (dolist (buf (buffer-list))
-    (when (buffer-live-p buf)
-      (let ((filename (buffer-file-name buf)))
-        (when (and filename (not (string-match "Nearbuy" filename)))
-          (kill-buffer buf))))))
-
 (defvar pms-previous-test-ring (make-ring 5))
 (defun pms-run-last-test (&optional n)
   "Run most recently run test again"
