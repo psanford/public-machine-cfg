@@ -2,13 +2,13 @@
 * {
     font-size: 12px;
     min-height: 22px;
-    color: #bbc2cf;
 }
 
 window#waybar {
     background: rgba(0, 0, 0, 0.87);
     border-style: solid;
     border-radius: 0px;
+    color: #bbc2cf;
 }
 
 button.focused {
