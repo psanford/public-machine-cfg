@@ -91,13 +91,14 @@ $(HOME)/.config/hypr/%: hyprland/%
 
 hyprland: $(patsubst %,$(HOME)/.config/hypr/%, $(_hyprlandfiles)) $(HOME)/.config/hypr/local.conf
 
-$(HOME)/.config/waybar/config: waybar/waybar.conf
+_waybarfiles=$(shell find waybar -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/waybar/%: waybar/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
 	mv -f $@.tmp $@
 	chmod 400 $@
 
-waybar: $(HOME)/.config/waybar/config
+waybar: $(patsubst %,$(HOME)/.config/waybar/%, $(_waybarfiles))
 
 _swayidlefiles=$(shell find swayidle -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/swayidle/%: swayidle/%
