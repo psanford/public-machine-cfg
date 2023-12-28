@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-tmp_name="$(tempfile)"
+tmp_name="$(mktemp)"
 
 cp $@ $tmp_name
 chmod 600 $tmp_name
