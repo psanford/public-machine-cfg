@@ -76,6 +76,12 @@ $(HOME)/.config/catt/%: catt/%
 
 catt: $(patsubst %,$(HOME)/.config/catt/%, $(_cattfiles))
 
+$(HOME)/.config/hypr/local.conf: $(shell find hyprland \( -name $(shell hostname).conf -o -name default \) -print -quit)
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
 _hyprlandfiles=$(shell find hyprland -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/hypr/%: hyprland/%
 	mkdir -p $(@D)
@@ -83,13 +89,7 @@ $(HOME)/.config/hypr/%: hyprland/%
 	mv -f $@.tmp $@
 	chmod 400 $@
 
-$(HOME)/.config/hypr/startup.sh: hyprland/startup.sh
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 500 $@
-
-hyprland: $(patsubst %,$(HOME)/.config/hypr/%, $(_hyprlandfiles))
+hyprland: $(patsubst %,$(HOME)/.config/hypr/%, $(_hyprlandfiles)) $(HOME)/.config/hypr/local.conf
 
 $(HOME)/.config/waybar/config: waybar/waybar.conf
 	mkdir -p $(@D)
