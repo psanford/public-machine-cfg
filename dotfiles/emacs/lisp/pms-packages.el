@@ -124,4 +124,13 @@
 (use-package bpftrace-mode
   :ensure t)
 
+(use-package ellama
+  :init
+  (setopt ellama-language "English")
+  (require 'llm-ollama)
+  (setopt ellama-provider
+		  (make-llm-ollama
+		   :chat-model "codellama" :embedding-model "codellama")))
+
+
 (provide 'pms-packages)
