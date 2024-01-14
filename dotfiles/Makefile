@@ -5,7 +5,7 @@
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel
 
 _binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -99,6 +99,15 @@ $(HOME)/.config/waybar/%: waybar/%
 	chmod 400 $@
 
 waybar: $(patsubst %,$(HOME)/.config/waybar/%, $(_waybarfiles))
+
+_nwg-panelfiles=$(shell find nwg-panel -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/nwg-panel/%: nwg-panel/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 400 $@
+
+nwg-panel: $(patsubst %,$(HOME)/.config/nwg-panel/%, $(_nwg-panelfiles))
 
 _swayidlefiles=$(shell find swayidle -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/swayidle/%: swayidle/%
@@ -197,4 +206,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt hyprland waybar swayidle foot
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt hyprland waybar swayidle foot nwg-panel
