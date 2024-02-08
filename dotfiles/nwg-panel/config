@@ -2,7 +2,7 @@
   {
     "name": "panel-top",
     "output": "",
-    "layer": "bottom",
+    "layer": "top",
     "position": "top",
     "controls": "right",
     "width": "auto",
@@ -34,7 +34,7 @@
       "commands": {
         "battery": ""
       },
-      "show-values": false,
+      "show-values": true,
       "interval": 1,
       "icon-size": 16,
       "hover-opens": false,
