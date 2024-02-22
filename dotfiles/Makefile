@@ -3,11 +3,19 @@
 # _SHELL := $(SHELL)
 # SHELL = $(warning [$@])$(_SHELL) -x
 
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	FIND=gfind
+else
+	FIND=find
+endif
+
 .DEFAULT: all
 
 all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel
 
-_binfiles:=$(shell find bin -not -name '\#*\#' -type f -printf '%P\n')
+_panel:=$(shell $(FIND) bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -16,7 +24,7 @@ $(HOME)/bin/%: bin/%
 
 bin: $(patsubst %,$(HOME)/bin/%, $(_binfiles))
 
-_bashfiles=$(shell find bash -not -name '\#*\#' -type f -printf '%P\n')
+_bashfiles=$(shell $(FIND) bash -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.bash.d/%: bash/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -30,7 +38,7 @@ $(HOME)/.bashrc: bashrc/bashrc
 
 bash: $(patsubst %,$(HOME)/.bash.d/%, $(_bashfiles)) $(HOME)/.bashrc
 
-_emacsfiles=$(shell find emacs -not -name '\#*\#' -type f -printf '%P\n')
+_emacsfiles=$(shell $(FIND) emacs -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.emacs.d/%: emacs/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -39,7 +47,7 @@ $(HOME)/.emacs.d/%: emacs/%
 
 emacs: $(patsubst %,$(HOME)/.emacs.d/%, $(_emacsfiles))
 
-_gnupgfiles=$(shell find gnupg -not -name '\#*\#' -type f -printf '%P\n')
+_gnupgfiles=$(shell $(FIND) gnupg -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.gnupg/%: gnupg/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -58,7 +66,7 @@ $(HOME)/.config/systemd/user/ssh-agent.service: ssh-agent/ssh-agent.service
 
 ssh-agent: $(HOME)/.config/systemd/user/ssh-agent.service
 
-_xmonadfiles=$(shell find xmonad -not -name '\#*\#' -type f -printf '%P\n')
+_xmonadfiles=$(shell $(FIND) xmonad -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.xmonad/%: xmonad/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -67,7 +75,7 @@ $(HOME)/.xmonad/%: xmonad/%
 
 xmonad: $(patsubst %,$(HOME)/.xmonad/%, $(_xmonadfiles))
 
-_cattfiles=$(shell find catt -not -name '\#*\#' -type f -printf '%P\n')
+_cattfiles=$(shell $(FIND) catt -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/catt/%: catt/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -76,13 +84,13 @@ $(HOME)/.config/catt/%: catt/%
 
 catt: $(patsubst %,$(HOME)/.config/catt/%, $(_cattfiles))
 
-$(HOME)/.config/hypr/local.conf: $(shell find hyprland \( -name $(shell hostname).conf -o -name default \) -print -quit)
+$(HOME)/.config/hypr/local.conf: $(shell $(FIND) hyprland \( -name $(shell hostname).conf -o -name default \) -print -quit)
 	mkdir -p $(@D)
 	cp $< $@.tmp
 	mv -f $@.tmp $@
 	chmod 400 $@
 
-_hyprlandfiles=$(shell find hyprland -not -name '\#*\#' -type f -printf '%P\n')
+_hyprlandfiles=$(shell $(FIND) hyprland -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/hypr/%: hyprland/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -91,7 +99,7 @@ $(HOME)/.config/hypr/%: hyprland/%
 
 hyprland: $(patsubst %,$(HOME)/.config/hypr/%, $(_hyprlandfiles)) $(HOME)/.config/hypr/local.conf
 
-_waybarfiles=$(shell find waybar -not -name '\#*\#' -type f -printf '%P\n')
+_waybarfiles=$(shell $(FIND) waybar -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/waybar/%: waybar/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -100,7 +108,7 @@ $(HOME)/.config/waybar/%: waybar/%
 
 waybar: $(patsubst %,$(HOME)/.config/waybar/%, $(_waybarfiles))
 
-_nwg-panelfiles=$(shell find nwg-panel -not -name '\#*\#' -type f -printf '%P\n')
+_nwg-panelfiles=$(shell $(FIND) nwg-panel -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/nwg-panel/%: nwg-panel/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -109,7 +117,7 @@ $(HOME)/.config/nwg-panel/%: nwg-panel/%
 
 nwg-panel: $(patsubst %,$(HOME)/.config/nwg-panel/%, $(_nwg-panelfiles))
 
-_swayidlefiles=$(shell find swayidle -not -name '\#*\#' -type f -printf '%P\n')
+_swayidlefiles=$(shell $(FIND) swayidle -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/swayidle/%: swayidle/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -118,7 +126,7 @@ $(HOME)/.config/swayidle/%: swayidle/%
 
 swayidle: $(patsubst %,$(HOME)/.config/swayidle/%, $(_swayidlefiles))
 
-_footfiles=$(shell find foot -not -name '\#*\#' -type f -printf '%P\n')
+_footfiles=$(shell $(FIND) foot -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/foot/%: foot/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -142,7 +150,7 @@ $(HOME)/.Xresources: xresources/Xresources
 
 xresources: $(HOME)/.Xresources
 
-$(HOME)/.Xresources.d/local: $(shell find xresources.d \( -name $(shell hostname) -o -name default \) -print -quit)
+$(HOME)/.Xresources.d/local: $(shell $(FIND) xresources.d \( -name $(shell hostname) -o -name default \) -print -quit)
 	mkdir -p $(@D)
 	cp $< $@.tmp
 	mv -f $@.tmp $@
@@ -191,7 +199,7 @@ $(HOME)/.screenrc: screenrc/screenrc
 
 screenrc: $(HOME)/.screenrc
 
-_systemdfiles=$(shell find systemd -not -name '\#*\#' -type f -printf '%P\n')
+_systemdfiles=$(shell $(FIND) systemd -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/systemd/user/%: systemd/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
