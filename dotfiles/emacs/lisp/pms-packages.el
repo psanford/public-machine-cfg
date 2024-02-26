@@ -52,6 +52,13 @@
             (setq lsp-ui-doc-enable nil))
   )
 
+
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp-deferred))))
+
 (use-package company
   :ensure t
   :config (progn
