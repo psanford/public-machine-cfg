@@ -152,7 +152,7 @@
 
 ;; Use fake xdg-open for links
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "/home/psanford/bin/xdg-open")
+      browse-url-generic-program "~/bin/xdg-open")
 
 (setq smart-tab-using-hippie-expand t)
 (setq smart-tab-disabled-major-modes '(term-mode inf-ruby-mode org-mode eshell-mode python-mode))
