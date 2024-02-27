@@ -139,5 +139,7 @@
 		  (make-llm-ollama
 		   :chat-model "codellama" :embedding-model "codellama")))
 
+(use-package editorconfig
+  :ensure t)
 
 (provide 'pms-packages)
