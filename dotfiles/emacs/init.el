@@ -70,6 +70,7 @@
 
 (require 'pms-git)
 (require 'pms-go)
+(require 'pms-rust)
 
 (load custom-file 'noerror)
 
