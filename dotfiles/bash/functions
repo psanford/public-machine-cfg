@@ -39,7 +39,7 @@ go_build_static() {
   CGO_ENABLED=0 go build -tags netgo
 }
 
-unalias ls 2>&1 > /dev/null
+unalias ls >/dev/null 2>&1
 alias ls='ls --color=auto'
 
 alias ec='emacsclient -n'
