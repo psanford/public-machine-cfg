@@ -15,7 +15,7 @@ endif
 
 all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel
 
-_panel:=$(shell $(FIND) bin -not -name '\#*\#' -type f -printf '%P\n')
+_binfiles:=$(shell $(FIND) bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
