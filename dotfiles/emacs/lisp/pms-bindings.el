@@ -30,6 +30,10 @@
 
 (global-set-key (kbd "C-<tab>") 'company-manual-begin)
 
+;; make M-` work like it does in macos
+(global-set-key (kbd "M-`") 'other-frame)
+
+
 ;; remove suspend frame key binding
 (global-unset-key (kbd "C-z"))
 
