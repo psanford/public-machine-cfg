@@ -259,7 +259,8 @@
 
 (server-start)
 
-(setq ispell-program-name (executable-find "hunspell"))
+(with-eval-after-load 'ispell
+  (setq ispell-program-name (executable-find "hunspell")))
 
 (custom-set-variables
  '(sentence-end-double-space nil) ;; keep fill-paragraph from adding double-space after periods
