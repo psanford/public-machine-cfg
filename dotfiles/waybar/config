@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["idle_inhibitor", "custom/media", "hyprland/workspaces", "backlight"],
     "modules-center": ["sway/window"],
-    "modules-right": [  "battery",  "pulseaudio", "network", "clock", "tray"],
+    "modules-right": [  "battery",  "pulseaudio", "custom/pipewire",  "network", "clock", "tray"],
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
@@ -129,5 +129,16 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/pipewire": {
+        "exec": "wpctl get-volume @DEFAULT_AUDIO_SINK@",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{icon} {percentage}",
+        "format-icons": {
+            "mute": "",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        }
     }
 }
