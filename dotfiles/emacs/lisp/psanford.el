@@ -20,7 +20,7 @@
   (set-register (car r) (cadr r)))
 
 (unless (get-register ?j)
-  (set-register ?j (file . "~/projects/machine-cfg/nixos/jerubbaal/configuration.nix")))
+  (set-register ?j '(file . "~/projects/machine-cfg/nixos/jerubbaal/configuration.nix")))
 
 
 (setq org-default-notes-file "~/.notes.org")
