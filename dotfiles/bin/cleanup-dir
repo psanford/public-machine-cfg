@@ -8,11 +8,17 @@ if [ ! -d "$DIR" ]; then
   exit 1
 fi
 
+if command -v gfind >/dev/null 2>&1; then
+  FIND="gfind"
+else
+  FIND="find"
+fi
+
 # delete files older than 7 days
-find $DIR -type f -mtime +7 -exec rm -f '{}' \; >> /tmp/cleanup_log 2>&1
+$FIND $DIR -type f -mtime +7 -exec rm -f '{}' \; >> /tmp/cleanup_log 2>&1
 
 # delete broken symlinks, don't look in hidden directories
-find $DIR -not -path '*/\.*' -type l -xtype l -exec rm -f '{}' \; >> /tmp/cleanup_log 2>&1
+$FIND $DIR -not -path '*/\.*' -type l -xtype l -exec rm -f '{}' \; >> /tmp/cleanup_log 2>&1
 
 # delete empty directories
-find $DIR -depth -mindepth 1 -type d -empty -delete >> /tmp/cleanup_log 2>&1
+$FIND $DIR -depth -mindepth 1 -type d -empty -delete >> /tmp/cleanup_log 2>&1
