@@ -64,5 +64,9 @@ if [ -n "${CLOUDFLARE_ACCT_NAME}" ] ; then
   export PS1="${BASE_PS1} "'(${CLOUDFLARE_ACCT_NAME})\$ '
 fi;
 
+if [ -n "${AWS_PROFILE}" ] ; then
+  export PS1="${BASE_PS1} "'(${AWS_PROFILE})\$ '
+fi;
+
 # Red prompt
 # PS1='\[\033[01;31m\]\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\[\033[00m\]\$ '
