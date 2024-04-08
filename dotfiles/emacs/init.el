@@ -85,7 +85,7 @@
 (if (file-exists-p user-specific-dir)
   (mapc #'load (directory-files user-specific-dir nil ".*el$")))
 
-(require 'color-theme-nearbuy)
-(color-theme-nearbuy)
+(add-to-list 'custom-theme-load-path lisp-dir)
+(load-theme 'nearbuy t)
 
 (pms-save-package-versions)
