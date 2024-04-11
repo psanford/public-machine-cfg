@@ -1,3 +1,5 @@
+(require 'cl-macs)
+
 (defun pms-calc-eval-region (beg end)
   "Eval the arithmetic expression in the region and replace it with the result"
   (interactive "r")
@@ -165,7 +167,7 @@
   "Reload all open buffers"
   (interactive)
   (let ((list (buffer-list)) buffer errmesg)
-    (loop for buffer in (buffer-list) do
+    (cl-loop for buffer in (buffer-list) do
           (cond ((eq 'dired-mode (buffer-local-value 'major-mode (get-buffer buffer)))
                  (set-buffer buffer)
                  (condition-case nil
