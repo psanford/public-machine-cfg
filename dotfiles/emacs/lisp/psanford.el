@@ -429,3 +429,7 @@
   :config
   (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
   (exec-path-from-shell-initialize))
+
+;; macos specific settings
+(when (eq window-system 'ns)
+  (setenv "PINENTRY_PROGRAM" "pinentry-mac"))

@@ -142,4 +142,16 @@
 (use-package editorconfig
   :ensure t)
 
+(use-package age
+  :ensure t
+  :demand t
+  :custom
+  (age-program "rage")
+  (age-default-identity "~/.ssh/age-yubikey-identity-27a9665e.txt")
+  (age-default-recipient
+   '("~/.ssh/age-yubikey.pub"
+     "~/.ssh/age-backup.pub"))
+  :config
+  (age-file-enable))
+
 (provide 'pms-packages)
