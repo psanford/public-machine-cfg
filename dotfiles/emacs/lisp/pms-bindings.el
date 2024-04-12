@@ -37,4 +37,7 @@
 ;; remove suspend frame key binding
 (global-unset-key (kbd "C-z"))
 
+;; remove scroll-down-command binding
+(global-unset-key (kbd "M-v"))
+
 (provide 'pms-bindings)
