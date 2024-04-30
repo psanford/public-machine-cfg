@@ -25,6 +25,9 @@
 
 ;;; Code:
 
+
+(require 'cl-lib)
+
 (defgroup json-error-mode nil
   "JSON editing mode"
   :group 'languages)
@@ -124,8 +127,8 @@ we discard the parse and reschedule it."
   "Highlight syntax errors."
   (json-error-clear-face (point-min) (point-max))
   (dolist (e json-error-parsed-errors)
-    (let* ((msg (first e))
-           (pos (second e))
+    (let* ((msg (cl-first e))
+           (pos (cl-second e))
            (beg (max (point-min) (min (- pos 1) (point-max))))
            (end (point-max))
            (ovl (make-overlay beg end)))
@@ -228,7 +231,7 @@ we discard the parse and reschedule it."
 
 (defsubst json-error-is-space (c)
   "returns t if character is whitespace"
-  (case c
+  (cl-case c
     (?\s t)
     (?\t t)
     (?\r t)
@@ -247,7 +250,7 @@ we discard the parse and reschedule it."
 
 (defun json-error-state-begin-value (c)
   "State at the beginning of the input."
-  (case c
+  (cl-case c
     (?\s json-error-scan-skip-space)
     (?\t json-error-scan-skip-space)
     (?\r json-error-scan-skip-space)
@@ -312,7 +315,7 @@ we discard the parse and reschedule it."
 (defun json-error-state-end-value (c)
   "state after completing a value, such as after reading '{}' or 'true'"
   (catch 'return
-    (let ((ps (first json-error-parse-state)))
+    (let ((ps (cl-first json-error-parse-state)))
       (cond
        ((= 0 (length json-error-parse-state))
         ;; completed top-level before the current char
