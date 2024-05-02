@@ -25,19 +25,12 @@
 
 ;;; Code:
 
-
-(require 'cl-lib)
-
 (defgroup json-error-mode nil
   "JSON editing mode"
   :group 'languages)
 
 (defface json-error-error-face
-  `((((class color) (background light))
-     (:foreground "red"))
-    (((class color) (background dark))
-     (:foreground "red"))
-    (t (:foreground "red")))
+  `((t (:inherit error)))
   "Face for JSON errors."
   :group 'json-error-mode)
 
@@ -127,8 +120,8 @@ we discard the parse and reschedule it."
   "Highlight syntax errors."
   (json-error-clear-face (point-min) (point-max))
   (dolist (e json-error-parsed-errors)
-    (let* ((msg (cl-first e))
-           (pos (cl-second e))
+    (let* ((msg (car e)) ; frist
+           (pos (cadr e)) ; second
            (beg (max (point-min) (min (- pos 1) (point-max))))
            (end (point-max))
            (ovl (make-overlay beg end)))
@@ -209,9 +202,9 @@ we discard the parse and reschedule it."
 
 (defun json-error-next-char ()
   (let (c)
-    (if (>= json-error-cursor (point-max))
+    (setq c (char-after json-error-cursor))
+    (if (null c)
         (setq c json-error-EOF-CHAR)
-      (setq c (char-after json-error-cursor))
       (when (= c ?\n)
         (setq json-error-lineno (+ 1 json-error-lineno))
         (setq json-error-line-offset -1))
@@ -231,12 +224,12 @@ we discard the parse and reschedule it."
 
 (defsubst json-error-is-space (c)
   "returns t if character is whitespace"
-  (cl-case c
-    (?\s t)
-    (?\t t)
-    (?\r t)
-    (?\n t)
-    (t nil)))
+  (cond
+   ((= c ?\s) t)
+   ((= c ?\t) t)
+   ((= c ?\r) t)
+   ((= c ?\n) t)
+   (t nil)))
 
 (defun json-error-state-begin-value-or-empty (c)
   "state after reading `[`"
@@ -250,44 +243,52 @@ we discard the parse and reschedule it."
 
 (defun json-error-state-begin-value (c)
   "State at the beginning of the input."
-  (cl-case c
-    (?\s json-error-scan-skip-space)
-    (?\t json-error-scan-skip-space)
-    (?\r json-error-scan-skip-space)
-    (?\n json-error-scan-skip-space)
-    (?{  (progn
-           (setq json-error-step 'json-error-state-begin-string-or-empty)
-           (push 'json-error-parse-object-key json-error-parse-state)
-           json-error-scan-begin-object))
-    (?\[ (progn
-           (setq json-error-step 'json-error-state-begin-value-or-empty)
-           (push 'json-error-parse-array-value json-error-parse-state)
-           json-error-scan-begin-array))
-    (?\" (progn
-           (setq json-error-step 'json-error-state-in-string)
-           json-error-scan-begin-literal))
-    (?-  (progn
-           (setq json-error-step 'json-error-state-neg)
-           json-error-scan-begin-literal))
-    (?0  (progn                         ; beginning of 0.123
-           (setq json-error-step 'json-error-state-0)
-           json-error-scan-begin-literal))
-    (?t  (progn                         ; beginning of true
-           (setq json-error-step 'json-error-state-t)
-           json-error-scan-begin-literal))
-    (?f  (progn                         ; beginning of false
-           (setq json-error-step 'json-error-state-f)
-           json-error-scan-begin-literal))
-    (?n  (progn                         ; beginning of null
-           (setq json-error-step 'json-error-state-n)
-           json-error-scan-begin-literal))
-    (t
-     (if (and (<= ?1 c) (<= c ?9))
-         (progn                         ; beginning of 1234.5
-           (setq json-error-step 'json-error-state-1)
-           json-error-scan-begin-literal)
+  (cond
+   ((= c ?\s) json-error-scan-skip-space)
+   ((= c ?\t) json-error-scan-skip-space)
+   ((= c ?\r) json-error-scan-skip-space)
+   ((= c ?\n) json-error-scan-skip-space)
+   ((= c ?{)
+    (progn
+      (setq json-error-step 'json-error-state-begin-string-or-empty)
+      (push 'json-error-parse-object-key json-error-parse-state)
+      json-error-scan-begin-object))
+   ((= c ?\[)
+    (progn
+      (setq json-error-step 'json-error-state-begin-value-or-empty)
+      (push 'json-error-parse-array-value json-error-parse-state)
+      json-error-scan-begin-array))
+   ((= c ?\")
+    (progn
+      (setq json-error-step 'json-error-state-in-string)
+      json-error-scan-begin-literal))
+   ((= c ?-)
+    (progn
+      (setq json-error-step 'json-error-state-neg)
+      json-error-scan-begin-literal))
+   ((= c ?0)                          ; beginning of 0.123
+    (progn
+      (setq json-error-step 'json-error-state-0)
+      json-error-scan-begin-literal))
+   ((= c ?t)                         ; beginning of true
+    (progn
+      (setq json-error-step 'json-error-state-t)
+      json-error-scan-begin-literal))
+   ((= c ?f)                         ; beginning of false
+    (progn
+      (setq json-error-step 'json-error-state-f)
+      json-error-scan-begin-literal))
+   ((= c ?n)                         ; beginning of null
+    (progn
+      (setq json-error-step 'json-error-state-n)
+      json-error-scan-begin-literal))
+   (t
+    (if (and (<= ?1 c) (<= c ?9))
+        (progn                         ; beginning of 1234.5
+          (setq json-error-step 'json-error-state-1)
+          json-error-scan-begin-literal)
                                         ; else error
-       (json-error-set-error c "looking for beginning of value")))))
+      (json-error-set-error c "looking for beginning of value")))))
 
 
 (defun json-error-state-begin-string-or-empty (c)
@@ -315,7 +316,7 @@ we discard the parse and reschedule it."
 (defun json-error-state-end-value (c)
   "state after completing a value, such as after reading '{}' or 'true'"
   (catch 'return
-    (let ((ps (cl-first json-error-parse-state)))
+    (let ((ps (car json-error-parse-state)))
       (cond
        ((= 0 (length json-error-parse-state))
         ;; completed top-level before the current char
