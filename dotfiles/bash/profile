@@ -1,5 +1,5 @@
 # shared profile settings for bashrc and .profile
-if [ -d "$HOME/bin" ] && [[ ":$PATH:" != *":$HOME/bin:"* ]] ; then
+if [ -e "$HOME/bin" ] && [[ ":$PATH:" != *":$HOME/bin:"* ]] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
