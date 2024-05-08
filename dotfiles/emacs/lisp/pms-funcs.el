@@ -298,4 +298,18 @@
   (interactive)
   (insert (buffer-file-name)))
 
+(defun pms-timeparse (timestamp)
+  "Invoke timeparse on timestamp"
+  (interactive
+   (list (read-string (format "Parse time (%s): "
+                              (if (use-region-p)
+                                  (buffer-substring-no-properties (region-beginning) (region-end))
+                                (thing-at-point 'word t)))
+                      nil nil
+                      (if (use-region-p)
+                          (buffer-substring-no-properties (region-beginning) (region-end))
+                        (thing-at-point 'word t)))))
+  (when (and (stringp timestamp) (not (string-empty-p timestamp)))
+    (compilation-start (format "timeparse \"%s\"" timestamp))))
+
 (provide 'pms-funcs)
