@@ -154,4 +154,7 @@
   :config
   (age-file-enable))
 
+(use-package zig-mode
+  :ensure t)
+
 (provide 'pms-packages)

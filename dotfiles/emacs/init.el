@@ -2,6 +2,10 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+;; don't display builtin emacs window decoration
+(set-frame-parameter nil 'undecorated t)
+(add-to-list 'default-frame-alist '(undecorated . t)))
+
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 (setq lisp-dir (concat dotfiles-dir "lisp/"))
