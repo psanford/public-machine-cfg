@@ -19,7 +19,7 @@ riverctl map normal Super P spawn "rofi -show run"
 riverctl map normal Super+Shift C close
 
 # Super+Shift+E to exit river
-riverctl map normal Super+Shift E exit
+riverctl map normal Control+Alt Backspace exit
 
 # ctrl-alt left/right for next previous workspace
 riverctl map normal Control+Alt Left spawn "river-buddy -ws-prev"
@@ -52,6 +52,8 @@ riverctl map normal Super L send-layout-cmd rivertile "main-ratio +0.05"
 # Super+Shift+H and Super+Shift+L to increment/decrement the main count of rivertile(1)
 riverctl map normal Super+Shift H send-layout-cmd rivertile "main-count +1"
 riverctl map normal Super+Shift L send-layout-cmd rivertile "main-count -1"
+
+riverctl map normal Control+Alt L spawn "swaylock --show-failed-attempts --indicator-idle-visible  --color 121b26 -t"
 
 # Super+Alt+{H,J,K,L} to move views
 riverctl map normal Super+Alt H move left 100
@@ -167,8 +169,14 @@ riverctl rule-add -app-id "bar" csd
 # set default keyboard layout
 riverctl keyboard-layout -options altwin:swap_lalt_lwin,caps:super us
 
+# focus follows mouse
+riverctl focus-follows-cursor normal
+
 # no natural scrolling please
 riverctl input pointer-1452-849-Apple_MTP_multi-touch natural-scroll disabled
+
+# non-ugly cursor theme and reasonable size
+riverctl xcursor-theme Vanilla-DMZ 24
 
 # set scale
 wlr-randr --output eDP-1 --scale 1.5
@@ -185,3 +193,4 @@ gnome-keyring-daemon &
 swayidle -w &
 nm-applet &
 blueman-applet &
+swaybg -i ~/.wallpapers/synthwave-and-retrowave_2560x1600.jpg &
