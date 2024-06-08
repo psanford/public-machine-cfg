@@ -5,7 +5,7 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["idle_inhibitor", "custom/media", "hyprland/workspaces", "backlight"],
+    "modules-left": ["idle_inhibitor", "custom/media", "hyprland/workspaces", "river/tags", "backlight"],
     "modules-center": ["sway/window"],
     "modules-right": [  "battery",  "pulseaudio", "custom/pipewire",  "network", "clock", "tray"],
     "idle_inhibitor": {
@@ -117,6 +117,12 @@
             "default": ""
         },
     "sort-by-number": true
+    },
+    "river/tags": {
+       "num-tags": 9,
+      "set-tags": [
+        1,2,4,8,16,32,64,128,256,512
+       ]
     },
     "custom/media": {
         "format": "{icon} {}",

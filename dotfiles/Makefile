@@ -13,7 +13,7 @@ endif
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel river
 
 _binfiles:=$(shell $(FIND) bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -134,6 +134,15 @@ $(HOME)/.config/foot/%: foot/%
 	chmod 400 $@
 
 foot: $(patsubst %,$(HOME)/.config/foot/%, $(_footfiles))
+
+_riverfiles=$(shell $(FIND) river -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/river/%: river/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 500 $@
+
+river: $(patsubst %,$(HOME)/.config/river/%, $(_riverfiles))
 
 $(HOME)/.gitconfig: git/config
 	cp $< $@.tmp
