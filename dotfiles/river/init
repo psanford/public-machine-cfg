@@ -164,6 +164,9 @@ riverctl rule-add -app-id 'float*' -title 'foo' float
 # Make all views with app-id "bar" and any title use client-side decorations
 riverctl rule-add -app-id "bar" csd
 
+# force emacs to have boarder decorations
+riverctl rule-add -app-id "emacs" ssd
+
 ################################################################################
 
 # set default keyboard layout
@@ -186,7 +189,7 @@ wlr-randr --output eDP-1 --scale 1.5
 # Set the default layout generator to be rivertile and start it.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
-rivertile -view-padding 6 -outer-padding 6 &
+rivertile -view-padding 0 -outer-padding 0 &
 
 waybar &
 gnome-keyring-daemon &

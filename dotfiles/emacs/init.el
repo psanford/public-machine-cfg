@@ -4,7 +4,7 @@
 
 ;; don't display builtin emacs window decoration
 (set-frame-parameter nil 'undecorated t)
-(add-to-list 'default-frame-alist '(undecorated . t)))
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
