@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo 10 i 2 o "$@" p | dc
