@@ -16,7 +16,9 @@
              (?h (file . "~/projects/public-machine-cfg/dotfiles/hyprland/hyprland.conf"))
              (?m (file . "~/projects/public-machine-cfg"))
              (?o (file . "~/projects/machine-cfg/nixos/onan/configuration.nix"))
-             (?p (file . ,(concat emacs-dir "lisp/psanford.el")))))
+             (?p (file . ,(concat emacs-dir "lisp/psanford.el")))
+             (?r (file . "~/projects/public-machine-cfg/dotfiles/river/init"))
+             ))
   (set-register (car r) (cadr r)))
 
 (unless (get-register ?j)
