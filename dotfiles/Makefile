@@ -13,7 +13,7 @@ endif
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel river
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel river mako
 
 _binfiles:=$(shell $(FIND) bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -143,6 +143,15 @@ $(HOME)/.config/river/%: river/%
 	chmod 500 $@
 
 river: $(patsubst %,$(HOME)/.config/river/%, $(_riverfiles))
+
+_makofiles=$(shell $(FIND) mako -not -name '\#*\#' -type f -printf '%P\n')
+$(HOME)/.config/mako/%: mako/%
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 500 $@
+
+mako: $(patsubst %,$(HOME)/.config/mako/%, $(_makofiles))
 
 $(HOME)/.gitconfig: git/config
 	cp $< $@.tmp
