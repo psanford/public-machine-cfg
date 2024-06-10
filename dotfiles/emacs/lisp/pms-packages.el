@@ -37,6 +37,7 @@
             (setq lsp-enable-indentation nil)
             (setq lsp-gopls-hover-kind "FullDocumentation")
             (setq lsp-headerline-breadcrumb-enable nil)
+            (setq lsp-pylsp-plugins-rope-autoimport-enabled 't)
             ;; use flycheck, not flymake
             (setq lsp-prefer-flymake nil)))
             ;; ;; don't show the 'test code lense
