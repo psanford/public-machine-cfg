@@ -4,8 +4,10 @@
 
 (define-key pms-kbd-map (kbd "g s") 'magit-status)
 (define-key pms-kbd-map (kbd "r f") 'pms-rg-files)
-(define-key pms-kbd-map (kbd "r s") 'pms-random-string)
+(define-key pms-kbd-map (kbd "r i") 'pms-random-ip)
+(define-key pms-kbd-map (kbd "r m") 'pms-random-mac)
 (define-key pms-kbd-map (kbd "r n") 'pms-random-number)
+(define-key pms-kbd-map (kbd "r s") 'pms-random-string)
 (define-key pms-kbd-map (kbd "s p") 'projectile-switch-project)
 (define-key pms-kbd-map (kbd "t q") 'toggle-quotes)
 (define-key pms-kbd-map (kbd "u b") 'pms-update-buffers)
@@ -39,5 +41,8 @@
 
 ;; remove scroll-down-command binding
 (global-unset-key (kbd "M-v"))
+
+;; remove binding for kill-current-buffer
+(global-unset-key (kbd "s-k"))
 
 (provide 'pms-bindings)
