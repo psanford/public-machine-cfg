@@ -65,16 +65,17 @@ alias opus='aichat -m claude:claude-3-opus-20240229'
 alias sonnet='aichat -m claude:claude-3-sonnet-20240229'
 alias haiku='aichat -m claude:claude-3-haiku-20240307'
 
-pbcopy() {
-  dest=${1-primary}
-  xclip -selection $dest
-}
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  pbcopy() {
+    dest=${1-primary}
+    xclip -selection $dest
+  }
 
-pbpaste() {
-  dest=${1-primary}
-  xclip -selection $dest -o
-}
-
+  pbpaste() {
+    dest=${1-primary}
+    xclip -selection $dest -o
+  }
+fi
 
 baud_rates() {
   echo "2400
