@@ -187,7 +187,7 @@ source $HOME/.config/river/$HOSTNAME
 # Set the default layout generator to be rivertile and start it.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout $LAYOUTMGR
-$HOME/bin/rivercarro -inner-gaps 0 -outer-gaps 0 &
+$LAYOUTMGR -inner-gaps 0 -outer-gaps 0 &
 
 # needed for gnome-keyring to work
 dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
