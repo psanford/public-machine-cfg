@@ -178,7 +178,7 @@ riverctl focus-follows-cursor normal
 riverctl input pointer-1452-849-Apple_MTP_multi-touch natural-scroll disabled
 
 # non-ugly cursor theme and reasonable size
-riverctl xcursor-theme Vanilla-DMZ 24
+riverctl xcursor-theme Adwaita 24
 
 source $HOME/.config/river/$HOSTNAME
 
