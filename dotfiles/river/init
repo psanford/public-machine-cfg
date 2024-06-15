@@ -10,7 +10,13 @@
 
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
-LAYOUTMGR=rivercarro
+LAYOUTMGR=rivertile
+LAYOUTMGR_FLAGS=(-view-padding 0 -outer-padding 0)
+
+if which rivercarro &>/dev/null ; then
+  LAYOUTMGR=rivercarro
+  LAYOUTMGR_FLAGS=(-inner-gaps 0 -outer-gaps 0)
+fi
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Super+Shift Return spawn foot
@@ -187,7 +193,7 @@ source $HOME/.config/river/$HOSTNAME
 # Set the default layout generator to be rivertile and start it.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout $LAYOUTMGR
-$LAYOUTMGR -inner-gaps 0 -outer-gaps 0 &
+$LAYOUTMGR "${LAYOUTMGR_FLAGS[@]}" &
 
 # needed for gnome-keyring to work
 dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
