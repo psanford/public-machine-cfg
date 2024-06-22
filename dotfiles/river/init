@@ -204,6 +204,7 @@ dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
 waybar &
 gnome-keyring-daemon &
 swayidle -w &
+pasystray &
 nm-applet &
 blueman-applet &
 mako &
