@@ -312,4 +312,21 @@
   (when (and (stringp timestamp) (not (string-empty-p timestamp)))
     (compilation-start (format "timeparse \"%s\"" timestamp))))
 
+
+(defun pms-unescape-json-string-region ()
+  "Unescapes JSON special characters in the current region."
+  (interactive)
+  (save-restriction
+    (narrow-to-region (point) (mark))
+    (goto-char (point-min))
+    (while (search-forward "\\" nil t)
+      (let* ((char (char-after))
+             (replacement (cdr (assq char json-special-chars))))
+        (if replacement
+            (progn
+              (backward-char 1)
+              (delete-char 2)
+              (insert-char replacement)))))))
+
+
 (provide 'pms-funcs)
