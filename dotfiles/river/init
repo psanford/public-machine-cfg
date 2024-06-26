@@ -201,6 +201,9 @@ $LAYOUTMGR "${LAYOUTMGR_FLAGS[@]}" &
 # needed for gnome-keyring to work
 dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
 
+# needed for xdg-desktop-portal-wlr to work properly
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=$river
+
 waybar &
 gnome-keyring-daemon &
 swayidle -w &
