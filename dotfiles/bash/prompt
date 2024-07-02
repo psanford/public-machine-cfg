@@ -54,6 +54,10 @@ function awsso_profile_prompt() {
   fi
 }
 
+if [ -n "${AWS_PROFILE}" ] ; then
+  export PS1="${BASE_PS1} "'(${AWS_PROFILE})\$ '
+fi;
+
 if [ -n "${AWSSO_PROFILE}" ] ; then
   echo -e "$(tput setab 1)In awsesh env ${AWSSO_PROFILE}$(tput sgr0)"
   export PS1="${BASE_PS1} "'($(awsso_profile_prompt))\$ '
@@ -62,10 +66,6 @@ fi;
 if [ -n "${CLOUDFLARE_ACCT_NAME}" ] ; then
   echo -e "$(tput setab 1)In cloudflare acct ${CLOUDFLARE_ACCT_NAME}$(tput sgr0)"
   export PS1="${BASE_PS1} "'(${CLOUDFLARE_ACCT_NAME})\$ '
-fi;
-
-if [ -n "${AWS_PROFILE}" ] ; then
-  export PS1="${BASE_PS1} "'(${AWS_PROFILE})\$ '
 fi;
 
 # Red prompt
