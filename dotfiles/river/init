@@ -15,7 +15,7 @@ LAYOUTMGR_FLAGS=(-view-padding 0 -outer-padding 0)
 
 if which rivercarro &>/dev/null ; then
   LAYOUTMGR=rivercarro
-  LAYOUTMGR_FLAGS=(-inner-gaps 0 -outer-gaps 0)
+  LAYOUTMGR_FLAGS=(-inner-gaps 0 -outer-gaps 0 -per-tag)
 fi
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
