@@ -435,3 +435,13 @@
 ;; macos specific settings
 (when (eq window-system 'ns)
   (setenv "PINENTRY_PROGRAM" "pinentry-mac"))
+
+(let ((claude-path (concat (getenv "HOME") "/projects/claude.el/claude.el"))
+      (api-key-path (concat (getenv "HOME") "/.anthropic_api_key")))
+  (when (and (file-exists-p claude-path) (file-exists-p api-key-path))
+    (require 'claude claude-path)
+    (setq claude-api-key
+          (string-trim
+           (with-temp-buffer
+             (insert-file-contents api-key-path)
+             (buffer-string))))))
