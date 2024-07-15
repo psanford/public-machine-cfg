@@ -22,7 +22,7 @@
 (use-package lsp-mode
   :ensure t
   ;; uncomment to enable gopls http debug server
-  :custom (lsp-gopls-server-args '("-debug" "127.0.0.1:0" "-rpc.trace" "-v" "-logfile" "/tmp/gopls.log"))
+  ;; :custom (lsp-gopls-server-args '("-debug" "127.0.0.1:0" "-rpc.trace" "-v" "-logfile" "/tmp/gopls.log"))
   ;; :load-path "/home/psanford/projects/thirdparty/lsp-mode"
   :init
   ;; this makes xref-find-references (<M-?>) use identifer at point instead
@@ -131,14 +131,6 @@
 
 (use-package bpftrace-mode
   :ensure t)
-
-(use-package ellama
-  :init
-  (setopt ellama-language "English")
-  (require 'llm-ollama)
-  (setopt ellama-provider
-		  (make-llm-ollama
-		   :chat-model "codellama" :embedding-model "codellama")))
 
 (use-package editorconfig
   :ensure t)
