@@ -92,6 +92,8 @@ riverctl map-pointer normal Super BTN_RIGHT resize-view
 
 # Super + Middle Mouse Button to toggle float
 riverctl map-pointer normal Super BTN_MIDDLE toggle-float
+# Super+T toggles float
+riverctl map normal Super T toggle-float
 
 for i in $(seq 1 9)
 do
