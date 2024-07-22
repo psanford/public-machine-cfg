@@ -111,7 +111,7 @@
       (set-frame-position (selected-frame) 503 24)
       (set-frame-height (selected-frame) 36))
   (setq nb-font-name "Inconsolata:style=Medium:size=24")
-  (set-frame-position (selected-frame) 20 350)
+;  (set-frame-position (selected-frame) 20 350)
   (set-frame-height (selected-frame) 58)
   (set-frame-width (selected-frame) 85))
 
