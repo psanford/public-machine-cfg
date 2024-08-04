@@ -121,9 +121,6 @@ riverctl map normal Super+Shift 0 set-view-tags $all_tags
 # Super+Space to toggle fullscreen
 riverctl map normal Super Space send-layout-cmd $LAYOUTMGR "main-location-cycle monocle,left,top"
 
-# Super+T to toggle float
-riverctl map normal Super F toggle-float
-
 # Super+{Up,Right,Down,Left} to change layout orientation
 #riverctl map normal Super Up    send-layout-cmd $LAYOUTMGR "main-location top"
 #riverctl map normal Super Right send-layout-cmd $LAYOUTMGR "main-location right"
