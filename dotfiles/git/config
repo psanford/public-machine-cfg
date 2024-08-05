@@ -7,7 +7,8 @@
 [alias]
   stauts = status
   track = !sh -c 'git branch --track $0 origin/$0'
-  cleanup-branches = "!git branch --merged master | grep -v '\\* master' | xargs -n 1 git branch -d"
+  cleanup-branches-master = "!git branch --merged master | grep -v '\\* master' | xargs -n 1 git branch -d"
+  cleanup-branches = "!git branch --merged main | grep -v '\\* main' | xargs -n 1 git branch -d"
   sl = log --graph --abbrev-commit --pretty=oneline --decorate=full
   bd = !git --no-pager branch --sort=committerdate
   db = bd
