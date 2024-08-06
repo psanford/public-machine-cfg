@@ -2,7 +2,7 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-(when (eq window-system 'x)
+(when (or (eq window-system 'x) (eq window-system 'pgtk))
   ;; don't display builtin emacs window decoration
   (set-frame-parameter nil 'undecorated t)
   (add-to-list 'default-frame-alist '(undecorated . t)))
