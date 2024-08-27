@@ -17,7 +17,9 @@
   :ensure t
   :commands (yas-minor-mode yas-reload-all)
   :delight yas-minor-mode
-  :hook (go-mode . yas-minor-mode))
+  :hook ((lsp-mode . yas-minor-mode)
+         (go-mode . yas-minor-mode))
+  )
 
 (use-package lsp-mode
   :ensure t
