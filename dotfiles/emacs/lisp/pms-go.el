@@ -143,6 +143,47 @@
 
 (add-hook 'go-mode-hook #'lsp-deferred)
 
+(defun pms-gofmt-r ()
+  "Rewrite the current buffer by applying the result of 'gofmt -r' to it"
+  (interactive)
+  (let ((rule (read-string "Enter gofmt -r rewrite rule: ")))
+    (if (string-empty-p rule)
+        (message "No rewrite rule provided. Aborting.")
+      (let ((buffer-contents (buffer-string)))
+        (with-temp-buffer
+          (insert buffer-contents)
+          (if (zerop (call-process-region (point-min) (point-max) "gofmt" t t nil "-r" rule))
+              (let ((rewritten-contents (buffer-string)))
+                (with-current-buffer (current-buffer)
+                  (erase-buffer)
+                  (insert rewritten-contents)
+                  (message "Buffer rewritten with gofmt -r rule: %s" rule)))
+            (message "Error applying gofmt -r rule: %s" rule)))))))
+
+
+(defun pms-go-fix-ioutil ()
+  "Replace deprecated ioutil functions with their non-deprecated alternatives using gofmt."
+  (interactive)
+  (let ((replacements
+         '(("ioutil.NopCloser(a)" . "io.NopCloser(a)")
+           ("ioutil.ReadAll(a)" . "io.ReadAll(a)")
+           ("ioutil.ReadDir(a)" . "os.ReadDir(a)")
+           ("ioutil.ReadFile(a)" . "os.ReadFile(a)")
+           ("ioutil.TempDir(a, b)" . "os.MkdirTemp(a, b)")
+           ("ioutil.TempFile(a, b)" . "os.CreateTemp(a, b)")
+           ("ioutil.WriteFile(a, b, c)" . "os.WriteFile(a, b, c)"))))
+    (dolist (replacement replacements)
+      (let ((from (car replacement))
+            (to (cdr replacement)))
+        (shell-command
+         (format "gofmt -w -r '%s -> %s' %s"
+                 from to (buffer-file-name)))
+        (message "Replaced %s with %s" from to)))
+    (revert-buffer t t)
+    (when lsp-mode
+      (lsp-organize-imports))
+    (message "Finished replacing deprecated ioutil functions.")))
+
 ;; https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 (lsp-register-custom-settings
  '(
