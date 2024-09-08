@@ -14,6 +14,7 @@
              (?e (file . ,(concat emacs-dir "init.el")))
              (?f (file . "~/projects/foo/foo.go"))
              (?h (file . "~/projects/public-machine-cfg/dotfiles/hyprland/hyprland.conf"))
+             (?l (file . "~/projects/machine-cfg/log/general.log"))
              (?m (file . "~/projects/public-machine-cfg"))
              (?o (file . "~/projects/machine-cfg/nixos/onan/configuration.nix"))
              (?p (file . ,(concat emacs-dir "lisp/psanford.el")))
