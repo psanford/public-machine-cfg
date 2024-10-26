@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+
+# from https://til.simonwillison.net/llms/prompt-gemini
+
+# Check if GOOGLE_API_KEY is set
+if [ -z "$GOOGLE_API_KEY" ]; then
+    echo "Error: GOOGLE_API_KEY environment variable is not set" >&2
+    exit 1
+fi
+
+# Default model and options
+model="8b"
+prompt=""
+image_file=""
+jq_filter="."
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -m)
+            model="$2"
+            shift 2
+            ;;
+        -r)
+            jq_filter=".candidates[0].content.parts[0].text"
+            shift
+            ;;
+        *)
+            if [ -z "$prompt" ]; then
+                prompt="$1"
+            elif [ -z "$image_file" ]; then
+                image_file="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+
+# Validate prompt
+if [ -z "$prompt" ]; then
+    echo "Error: No prompt provided" >&2
+    echo "Usage: prompt-gemini \"prompt\" [image_file] [-m model] [-r]" >&2
+    exit 1
+fi
+
+# Map model names to full model strings
+case $model in
+    "8b"|"flash-8b")
+        model_string="gemini-1.5-flash-8b-latest"
+        ;;
+    "flash")
+        model_string="gemini-1.5-flash-latest"
+        ;;
+    "pro")
+        model_string="gemini-1.5-pro-latest"
+        ;;
+    *)
+        model_string="gemini-1.5-$model"
+        ;;
+esac
+
+# Create temporary file
+temp_file=$(mktemp)
+trap 'rm -f "$temp_file"' EXIT
+
+# Determine mime type if image file is provided
+if [ -n "$image_file" ]; then
+    if [ ! -f "$image_file" ]; then
+        echo "Error: File '$image_file' not found" >&2
+        exit 1
+    fi
+
+    # Get file extension and convert to lowercase
+    ext=$(echo "${image_file##*.}" | tr '[:upper:]' '[:lower:]')
+
+    case $ext in
+        png)
+            mime_type="image/png"
+            ;;
+        jpg|jpeg)
+            mime_type="image/jpeg"
+            ;;
+        gif)
+            mime_type="image/gif"
+            ;;
+        pdf)
+            mime_type="application/pdf"
+            ;;
+        *)
+            echo "Error: Unsupported file type .$ext" >&2
+            exit 1
+            ;;
+    esac
+
+    # Create JSON with image data
+    cat <<EOF > "$temp_file"
+{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "$prompt"
+        },
+        {
+          "inlineData": {
+            "data": "$(base64 -i "$image_file")",
+            "mimeType": "$mime_type"
+          }
+        }
+      ]
+    }
+  ]
+}
+EOF
+else
+    # Create JSON without image data
+    cat <<EOF > "$temp_file"
+{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "$prompt"
+        }
+      ]
+    }
+  ]
+}
+EOF
+fi
+
+# Make API request with jq filter
+curl -s "https://generativelanguage.googleapis.com/v1beta/models/$model_string:generateContent?key=$GOOGLE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -X POST \
+    -d @"$temp_file" | jq "$jq_filter" -r
