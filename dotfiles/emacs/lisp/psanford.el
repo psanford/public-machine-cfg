@@ -16,14 +16,14 @@
              (?h (file . "~/projects/public-machine-cfg/dotfiles/hyprland/hyprland.conf"))
              (?l (file . "~/projects/machine-cfg/log/general.log"))
              (?m (file . "~/projects/public-machine-cfg"))
-             (?o (file . "~/projects/machine-cfg/nixos/onan/configuration.nix"))
+             (?o (file . "~/projects/nix-cfg/onan/configuration.nix"))
              (?p (file . ,(concat emacs-dir "lisp/psanford.el")))
              (?r (file . "~/projects/public-machine-cfg/dotfiles/river/init"))
              ))
   (set-register (car r) (cadr r)))
 
 (unless (get-register ?j)
-  (set-register ?j '(file . "~/projects/machine-cfg/nixos/jerubbaal/configuration.nix")))
+  (set-register ?j '(file . "~/projects/nix-cfg/jerubbaal/configuration.nix")))
 
 
 (setq org-default-notes-file "~/.notes.org")
