@@ -65,6 +65,8 @@ alias opus='aichat -m claude:claude-3-opus-20240229'
 alias sonnet='aichat -m claude:claude-3-sonnet-20240229'
 alias haiku='aichat -m claude:claude-3-haiku-20240307'
 
+alias qr-terminal='qrencode -t ANSIUTF8'
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   pbcopy() {
     wl-copy -p
