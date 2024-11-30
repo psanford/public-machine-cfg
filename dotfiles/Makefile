@@ -13,7 +13,7 @@ endif
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt hyprland waybar swayidle foot nwg-panel river mako
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt waybar swayidle foot nwg-panel river mako
 
 _binfiles:=$(shell $(FIND) bin -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/bin/%: bin/%
@@ -83,21 +83,6 @@ $(HOME)/.config/catt/%: catt/%
 	chmod 400 $@
 
 catt: $(patsubst %,$(HOME)/.config/catt/%, $(_cattfiles))
-
-$(HOME)/.config/hypr/local.conf: $(shell $(FIND) hyprland \( -name $(shell hostname).conf -o -name default \) -print -quit)
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-_hyprlandfiles=$(shell $(FIND) hyprland -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/hypr/%: hyprland/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-hyprland: $(patsubst %,$(HOME)/.config/hypr/%, $(_hyprlandfiles)) $(HOME)/.config/hypr/local.conf
 
 _waybarfiles=$(shell $(FIND) waybar -not -name '\#*\#' -type f -printf '%P\n')
 $(HOME)/.config/waybar/%: waybar/%
@@ -232,4 +217,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt hyprland waybar swayidle foot nwg-panel
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt waybar swayidle foot nwg-panel
