@@ -110,6 +110,32 @@
   (interactive)
   (insert (pms-chomp (shell-command-to-string "uuidgen"))))
 
+(defvar pms-names-cache-file "~/.emacs.d/first-names.txt"
+  "File path for cached names list.")
+
+(defun pms-fetch-names ()
+  "Fetch list of names from GitHub and save to local cache."
+  (with-current-buffer (url-retrieve-synchronously
+                       "https://raw.githubusercontent.com/dominictarr/random-name/468ae50d63f1d1ecb417d1b119748df9191431e7/first-names.txt"
+                       t t)
+    (goto-char (point-min))
+    (re-search-forward "\n\n")  ; skip http headers
+    (make-directory (file-name-directory pms-names-cache-file) t)
+    (write-region (buffer-substring (point) (point-max)) nil pms-names-cache-file)))
+
+(defun pms-random-name ()
+  "Inserts a random name"
+  (interactive)
+  (unless (file-exists-p pms-names-cache-file)
+    (pms-fetch-names))
+  (let ((name))
+    (save-excursion
+      (with-temp-buffer
+        (insert-file-contents pms-names-cache-file)
+        (goto-char (random (buffer-size)))
+        (setq name (current-word))))
+    (insert name)))
+
 ;; Taken from http://www.emacswiki.org/emacs/ToggleWindowSplit
 (defun pms-toggle-window-split ()
   (interactive)
