@@ -630,3 +630,7 @@ nix-enable() {
 about-me() {
   cat ~/.aboutme
 }
+
+jwt-decode() {
+  jq -R 'split(".") | .[1] | @base64d | fromjson'
+}
