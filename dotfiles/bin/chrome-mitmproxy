@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+TEMP_DIR="$HOME/.google-chrome-mitmproxy"
+CERT_DB="$TEMP_DIR/.pki/nssdb"
+
+mkdir -p "$CERT_DB"
+
+cat > "$TEMP_DIR/mitmproxy-ca.pem" << 'EOF'
+-----BEGIN CERTIFICATE-----
+MIIDNTCCAh2gAwIBAgIUHqATzur8S2jrAcfyu5aSVubzmnAwDQYJKoZIhvcNAQEL
+BQAwKDESMBAGA1UEAwwJbWl0bXByb3h5MRIwEAYDVQQKDAltaXRtcHJveHkwHhcN
+MjQwOTE5MTIxNjM0WhcNMzQwOTE5MTIxNjM0WjAoMRIwEAYDVQQDDAltaXRtcHJv
+eHkxEjAQBgNVBAoMCW1pdG1wcm94eTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBALDUZpE0SxaQdPRWy2v+6U38kcqJMbpnsqrnvasdiXh37Ivb8n5Bj7tZ
+SBcGlfoAjQuUKCDKY9k/osXdJwObF8ouW+z0rCEnaM0rs8ULjykINPWjQy1VjfwF
+czncXIgVBxKurldMVUslvPqu2ElPgDovM+6JvddXhciMkqElK8itVFVGiGU1TIA7
+lEQeCA+oKMyRNjRcyVx3NSYvTzmwGPT/H929I16XY1yvb9/R/OH2B4lUcVfQIXQr
+Lhmm01lwVwwe4qlMJa0gDSYCwUxsIN9e++niqR47ebAkmY9yM1woPYz2wOvfx5OV
+kGE9L2TbHcIU1StBqYWldIEjoRD6RZkCAwEAAaNXMFUwDwYDVR0TAQH/BAUwAwEB
+/zATBgNVHSUEDDAKBggrBgEFBQcDATAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYE
+FCGCyrj+N1krxXwuq9KGDIZ1s3UmMA0GCSqGSIb3DQEBCwUAA4IBAQAI2gKfacPb
+U4N2nSQ7R1QkFrP5YX8/9thanVbwy0s0Vl2EK/Ia1ZcMdA5NM6171rKd/Dquz+xU
+FOeMpe/uVlLiELHqRtppuoF20HhexHEkZdl1ChkK6RcxkS8alQp7pSHI3kHtCZqK
+mijQi2na7O3xM/AiMOkUAmcYHmfJw/I/2PQSIfZGI/lupc1Va8bSmBV6q7aswTL2
+mahFVKOsASIUNUgr5W+abP/m48Iqhnbx/C8cbwbi6i6PYVS1lL0LYdm+39ZCgyuh
+f8eLnGTzpg96buOYfGLjEDxrzwLX4uNS4aGacheH+2S3zQvIM6LKNj87FVrg0WET
+mWG8tbp1yC4O
+-----END CERTIFICATE-----
+EOF
+
+if [ ! -f "$CERT_DB/cert9.db" ]; then
+  # Create a new database with empty password
+  certutil -d "sql:$CERT_DB" -N --empty-password
+fi
+
+certutil -A -d "sql:$CERT_DB" -t "C,," -n "mitmproxy" -i "$TEMP_DIR/mitmproxy-ca.pem"
+
+HOME="$TEMP_DIR" chromium --proxy-server=http://localhost:8080 \
+  --user-data-dir="$TEMP_DIR/chrome-data" \
+  --no-first-run --new-window "$@"
