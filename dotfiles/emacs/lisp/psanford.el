@@ -58,6 +58,9 @@
 ;; don't touch my buffers, magit!
 (magit-auto-revert-mode -1)
 
+;; don't write files to trash folder
+(setq magit-delete-by-moving-to-trash nil)
+
 (add-hook 'git-commit-mode-hook 'git-commit-turn-on-flyspell)
 
 (add-hook 'markdown-mode-hook
