@@ -15,6 +15,15 @@ require (
 )
 
 require (
+	github.com/breml/rootcerts v0.2.10 // indirect
+	github.com/donovanhide/eventsource v0.0.0-20210830082556-c59027999da0 // indirect
+	github.com/gokrazy/internal v0.0.0-20230313074923-5f469e7488b0 // indirect
+	github.com/gokrazy/tools v0.0.0-20230812085738-23cde3b0d858 // indirect
+	github.com/gokrazy/updater v0.0.0-20230215172637-813ccc7f21e2 // indirect
+	github.com/google/renameio/v2 v2.0.0 // indirect
+)
+
+require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 // indirect
 	github.com/cilium/ebpf v0.11.0 // indirect

@@ -8,6 +8,7 @@ import (
 	_ "github.com/FiloSottile/captive-browser"
 	_ "github.com/fatih/gomodifytags"
 	_ "github.com/go-delve/delve/cmd/dlv"
+	_ "github.com/gokrazy/tools/cmd/gok"
 	_ "github.com/josharian/impl"
 	_ "github.com/psanford/ppjson"
 	_ "github.com/skanehira/gjo"
