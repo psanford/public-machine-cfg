@@ -15,128 +15,44 @@ endif
 
 all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt waybar swayidle foot nwg-panel river mako
 
-_binfiles:=$(shell $(FIND) bin -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/bin/%: bin/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 555 $@
+# Define a template function for directory copying rules
+define copy_template
+# Find source files
+_$(1)files := $$(shell $$(FIND) $(1) -not -name '\#*\#' -type f -printf '%P\n')
 
-bin: $(patsubst %,$(HOME)/bin/%, $(_binfiles))
+# Define the target path based on destination type
+$(2)/%: $(1)/%
+	mkdir -p $$(@D)
+	cp $$< $$@.tmp
+	mv -f $$@.tmp $$@
+	chmod $(3) $$@
 
-_bashfiles=$(shell $(FIND) bash -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.bash.d/%: bash/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 444 $@
+# Target definition that expands to the pattern rule
+$(1): $$(patsubst %,$(2)/%, $$(_$(1)files))
+endef
 
+# Apply template to directories
+$(eval $(call copy_template,bin,$(HOME)/bin,555))
+$(eval $(call copy_template,bash,$(HOME)/.bash.d,444))
+$(eval $(call copy_template,emacs,$(HOME)/.emacs.d,444))
+$(eval $(call copy_template,gnupg,$(HOME)/.gnupg,444))
+$(eval $(call copy_template,xmonad,$(HOME)/.xmonad,400))
+$(eval $(call copy_template,catt,$(HOME)/.config/catt,400))
+$(eval $(call copy_template,waybar,$(HOME)/.config/waybar,400))
+$(eval $(call copy_template,swayidle,$(HOME)/.config/swayidle,400))
+$(eval $(call copy_template,foot,$(HOME)/.config/foot,400))
+$(eval $(call copy_template,nwg-panel,$(HOME)/.config/nwg-panel,400))
+$(eval $(call copy_template,river,$(HOME)/.config/river,500))
+$(eval $(call copy_template,mako,$(HOME)/.config/mako,500))
+$(eval $(call copy_template,systemd,$(HOME)/.config/systemd/user,444))
+
+# Single file targets
 $(HOME)/.bashrc: bashrc/bashrc
 	cp $< $@.tmp
 	mv -f $@.tmp $@
 	chmod 400 $@
 
 bash: $(patsubst %,$(HOME)/.bash.d/%, $(_bashfiles)) $(HOME)/.bashrc
-
-_emacsfiles=$(shell $(FIND) emacs -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.emacs.d/%: emacs/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 444 $@
-
-emacs: $(patsubst %,$(HOME)/.emacs.d/%, $(_emacsfiles))
-
-_gnupgfiles=$(shell $(FIND) gnupg -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.gnupg/%: gnupg/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 444 $@
-
-gnupg: $(patsubst %,$(HOME)/.gnupg/%, $(_gnupgfiles))
-
-$(HOME)/.config/systemd/user/ssh-agent.service: ssh-agent/ssh-agent.service
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-	systemctl --user enable ssh-agent
-	systemctl --user start ssh-agent
-
-ssh-agent: $(HOME)/.config/systemd/user/ssh-agent.service
-
-_xmonadfiles=$(shell $(FIND) xmonad -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.xmonad/%: xmonad/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-xmonad: $(patsubst %,$(HOME)/.xmonad/%, $(_xmonadfiles))
-
-_cattfiles=$(shell $(FIND) catt -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/catt/%: catt/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-catt: $(patsubst %,$(HOME)/.config/catt/%, $(_cattfiles))
-
-_waybarfiles=$(shell $(FIND) waybar -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/waybar/%: waybar/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-waybar: $(patsubst %,$(HOME)/.config/waybar/%, $(_waybarfiles))
-
-_nwg-panelfiles=$(shell $(FIND) nwg-panel -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/nwg-panel/%: nwg-panel/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-nwg-panel: $(patsubst %,$(HOME)/.config/nwg-panel/%, $(_nwg-panelfiles))
-
-_swayidlefiles=$(shell $(FIND) swayidle -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/swayidle/%: swayidle/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-swayidle: $(patsubst %,$(HOME)/.config/swayidle/%, $(_swayidlefiles))
-
-_footfiles=$(shell $(FIND) foot -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/foot/%: foot/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 400 $@
-
-foot: $(patsubst %,$(HOME)/.config/foot/%, $(_footfiles))
-
-_riverfiles=$(shell $(FIND) river -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/river/%: river/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 500 $@
-
-river: $(patsubst %,$(HOME)/.config/river/%, $(_riverfiles))
-
-_makofiles=$(shell $(FIND) mako -not -name '\#*\#' -type f -printf '%P\n')
-$(HOME)/.config/mako/%: mako/%
-	mkdir -p $(@D)
-	cp $< $@.tmp
-	mv -f $@.tmp $@
-	chmod 500 $@
-
-mako: $(patsubst %,$(HOME)/.config/mako/%, $(_makofiles))
 
 $(HOME)/.gitconfig: git/config
 	cp $< $@.tmp
@@ -150,8 +66,6 @@ $(HOME)/.Xresources: xresources/Xresources
 	mv -f $@.tmp $@
 	chmod 400 $@
 	xrdb -merge $@
-
-xresources: $(HOME)/.Xresources
 
 $(HOME)/.Xresources.d/local: $(shell $(FIND) xresources.d \( -name $(shell hostname) -o -name default \) -print -quit)
 	mkdir -p $(@D)
@@ -202,7 +116,7 @@ $(HOME)/.screenrc: screenrc/screenrc
 
 screenrc: $(HOME)/.screenrc
 
-_systemdfiles=$(shell $(FIND) systemd -not -name '\#*\#' -type f -printf '%P\n')
+# Override systemd template behavior to add service management
 $(HOME)/.config/systemd/user/%: systemd/%
 	mkdir -p $(@D)
 	cp $< $@.tmp
@@ -217,4 +131,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt waybar swayidle foot nwg-panel
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt waybar swayidle foot nwg-panel river mako
