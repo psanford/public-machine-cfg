@@ -13,7 +13,9 @@ endif
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt waybar swayidle foot nwg-panel river mako
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt waybar swayidle foot nwg-panel river mako claude
+
+################################################################################
 
 # Define a template function for directory copying rules
 define copy_template
@@ -31,12 +33,13 @@ $(2)/%: $(1)/%
 $(1): $$(patsubst %,$(2)/%, $$(_$(1)files))
 endef
 
-# Apply template to directories
 $(eval $(call copy_template,bin,$(HOME)/bin,555))
 $(eval $(call copy_template,bash,$(HOME)/.bash.d,444))
+$(eval $(call copy_template,claude,$(HOME)/.claude,444))
 $(eval $(call copy_template,emacs,$(HOME)/.emacs.d,444))
 $(eval $(call copy_template,gnupg,$(HOME)/.gnupg,444))
 $(eval $(call copy_template,xmonad,$(HOME)/.xmonad,400))
+
 $(eval $(call copy_template,catt,$(HOME)/.config/catt,400))
 $(eval $(call copy_template,waybar,$(HOME)/.config/waybar,400))
 $(eval $(call copy_template,swayidle,$(HOME)/.config/swayidle,400))
@@ -44,9 +47,9 @@ $(eval $(call copy_template,foot,$(HOME)/.config/foot,400))
 $(eval $(call copy_template,nwg-panel,$(HOME)/.config/nwg-panel,400))
 $(eval $(call copy_template,river,$(HOME)/.config/river,500))
 $(eval $(call copy_template,mako,$(HOME)/.config/mako,500))
-$(eval $(call copy_template,systemd,$(HOME)/.config/systemd/user,444))
 
-# Single file targets
+################################################################################
+
 $(HOME)/.bashrc: bashrc/bashrc
 	cp $< $@.tmp
 	mv -f $@.tmp $@
@@ -131,4 +134,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt waybar swayidle foot nwg-panel river mako
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt waybar swayidle foot nwg-panel river mako claude
