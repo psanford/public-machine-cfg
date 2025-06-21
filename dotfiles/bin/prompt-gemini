@@ -86,6 +86,12 @@ if [ -n "$image_file" ]; then
         pdf)
             mime_type="application/pdf"
             ;;
+        mp3)
+            mime_type="audio/mp3"
+            ;;
+        mp4)
+            mime_type="video/mp4"
+            ;;
         *)
             echo "Error: Unsupported file type .$ext" >&2
             exit 1
