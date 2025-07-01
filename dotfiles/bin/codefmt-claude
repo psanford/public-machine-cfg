@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# claude hook
+
+FILENAME="$(jq -r .tool_input.file_path)"
+
+if [[ "$FILENAME" == *.go ]]; then
+    goimports -w "$FILENAME"
+fi
+
+exit 0
