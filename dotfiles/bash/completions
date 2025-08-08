@@ -195,7 +195,7 @@ if which awsso &>/dev/null ; then
   . <(awsso completion bash)
 fi
 if which aws-buddy &>/dev/null ; then
-  . <(aws-buddy completion)
+  . <(aws-buddy completion bash)
 fi
 if which wormhole-william &>/dev/null ; then
   . <(wormhole-william shell-completion bash)
