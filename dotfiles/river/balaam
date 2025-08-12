@@ -1,0 +1,5 @@
+riverctl keyboard-layout -options altwin:swap_lalt_lwin,caps:super us
+
+wlr-randr --output eDP-1 --scale 1.5
+
+swaybg -i ~/.wallpapers/synthwave-and-retrowave_2560x1600.jpg &
