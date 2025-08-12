@@ -11,6 +11,8 @@ if [ "$(hostname)" = "onan" ]; then
   BASE_PS1=$PRIMARY_PS1
 elif [ "$(hostname)" = "jerubbaal" ]; then
   BASE_PS1=$PRIMARY_PS1
+elif [ "$(hostname)" = "balaam" ]; then
+  BASE_PS1=$PRIMARY_PS1
 elif [ -e "$HOME/.bash.d/primary_prompt" ]; then
   BASE_PS1=$PRIMARY_PS1
 else
