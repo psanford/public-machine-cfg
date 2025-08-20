@@ -23,8 +23,7 @@
   (set-register (car r) (cadr r)))
 
 (unless (get-register ?j)
-  (set-register ?j '(file . "~/projects/nix-cfg/jerubbaal/configuration.nix")))
-
+  (set-register ?j `(file . ,(concat "~/projects/nix-cfg/" system-name "/configuration.nix"))))
 
 (setq org-default-notes-file "~/.notes.org")
 
