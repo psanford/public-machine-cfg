@@ -13,7 +13,7 @@ endif
 
 .DEFAULT: all
 
-all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt waybar swayidle foot nwg-panel river mako claude
+all: bin bash emacs git xresources xmonad inputrc profile gdbinit vim i3 xprofile screenrc systemd gnupg catt waybar swayidle foot nwg-panel river mako claude ghostty
 
 ################################################################################
 
@@ -47,6 +47,7 @@ $(eval $(call copy_template,foot,$(HOME)/.config/foot,400))
 $(eval $(call copy_template,nwg-panel,$(HOME)/.config/nwg-panel,400))
 $(eval $(call copy_template,river,$(HOME)/.config/river,500))
 $(eval $(call copy_template,mako,$(HOME)/.config/mako,500))
+$(eval $(call copy_template,ghostty,$(HOME)/.config/ghostty,400))
 
 ################################################################################
 
@@ -134,4 +135,4 @@ systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)
 
-.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt waybar swayidle foot nwg-panel river mako claude
+.PHONY: all bin bash emacs git xresources xmonad profile inputrc gdbinit i3 xprofile ssh-agent screenrc systemd catt waybar swayidle foot nwg-panel river mako claude ghostty
