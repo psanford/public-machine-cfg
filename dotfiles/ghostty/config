@@ -37,3 +37,6 @@
 font-feature = -calt
 font-feature = -liga
 font-feature = -dlig
+
+cursor-style = block
+shell-integration-features = no-cursor
