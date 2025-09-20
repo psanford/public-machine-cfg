@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if [ -z "$@" ]; then
+  echo "usage: $0 <ip>"
+  exit 1
+fi
+
+curl -q http://ip-api.com/line/$@
