@@ -251,7 +251,7 @@
 (defun pms-ppjson-region (beg end)
   "Pretty Print json in region"
   (interactive "r")
-  (shell-command-on-region beg end "ppjson" nil t nil t))
+  (shell-command-on-region beg end "jq ." nil t nil t))
 
 (defun pms-uglyjson-region (beg end)
   "Ugly Print json in region"
