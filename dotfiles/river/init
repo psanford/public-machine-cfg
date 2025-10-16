@@ -64,7 +64,7 @@ riverctl map normal Super L send-layout-cmd $LAYOUTMGR "main-ratio +0.05"
 riverctl map normal Super+Shift H send-layout-cmd $LAYOUTMGR "main-count +1"
 riverctl map normal Super+Shift L send-layout-cmd $LAYOUTMGR "main-count -1"
 
-riverctl map normal Control+Alt L spawn "swaylock --show-failed-attempts --indicator-idle-visible  --color 121b26 -t"
+riverctl map normal Control+Alt L spawn "swaylock --daemonize --show-failed-attempts --indicator-idle-visible  --color 121b26 -t"
 
 # Super+Alt+{H,J,K,L} to move views
 riverctl map normal Super+Alt H move left 100
