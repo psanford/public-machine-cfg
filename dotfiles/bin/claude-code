@@ -1,0 +1,3 @@
+#!/bin/sh
+
+USE_BUILTIN_RIPGREP=0 ~/lib/claude-code/node_modules/.bin/claude "$@"
