@@ -30,7 +30,7 @@ function normal_prompt() {
 }
 
 function other_prompt() {
-  PS1=$OTHER_PROMPT
+  PS1='\[\033[01;33m\]\w\[\033[00m\]$ '
 }
 
 # If exec'ed into an aws_vault environment
