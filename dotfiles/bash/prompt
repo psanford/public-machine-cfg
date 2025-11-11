@@ -29,6 +29,10 @@ function normal_prompt() {
   PS1=$DEFAULT_PROMPT
 }
 
+function other_prompt() {
+  PS1=$OTHER_PROMPT
+}
+
 # If exec'ed into an aws_vault environment
 if [ -n "${AWS_VAULT}" ] ; then
   echo -e "$(tput setab 1)In aws-vault env ${AWS_VAULT}$(tput sgr0)"
