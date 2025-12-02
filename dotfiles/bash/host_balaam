@@ -1,2 +1,2 @@
-# use gnome-keyring that we started from river
-export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/keyring/ssh
+# use gcr keyring
+export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh
