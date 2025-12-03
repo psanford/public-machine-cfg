@@ -2,6 +2,7 @@
 (global-set-key (kbd "s-a") 'pms-kbd-map)
 (global-set-key (kbd "<C-f10>") 'pms-kbd-map)
 
+(define-key pms-kbd-map (kbd "c l") 'pms-calc-eval-line)
 (define-key pms-kbd-map (kbd "g s") 'magit-status)
 (define-key pms-kbd-map (kbd "r f") 'pms-rg-files)
 (define-key pms-kbd-map (kbd "r i") 'pms-random-ip)
