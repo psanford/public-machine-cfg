@@ -21,6 +21,9 @@ export ANDROID_HOME=~/lib/android-sdk
 
 export GOKRAZY_PARENT_DIR=~/projects/gokrazy-config
 
+# disable et telemetry collection
+export ET_NO_TELEMETRY=1
+
 # fix java gui apps in xmonad
 export _JAVA_AWT_WM_NONREPARENTING=1
 
