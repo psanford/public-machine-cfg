@@ -81,6 +81,10 @@
             )
   )
 
+(use-package flit
+  :vc (:url "https://github.com/muirdm/flit.el" :rev :newest)
+  :ensure t)
+
 ;; optional package to get the error squiggles as you edit
 (use-package flycheck
   :ensure t)
