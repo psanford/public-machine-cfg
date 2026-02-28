@@ -17,8 +17,6 @@ export LC_TIME=C
 
 export AWS_ASSUME_ROLE_TTL=1h
 
-export ANDROID_HOME=~/lib/android-sdk
-
 export GOKRAZY_PARENT_DIR=~/projects/gokrazy-config
 
 # disable et telemetry collection
