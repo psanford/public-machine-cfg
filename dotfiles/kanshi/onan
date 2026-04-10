@@ -1,0 +1,8 @@
+profile {
+  output "BOE 0x0791 Unknown" enable mode 1920x1080 position 1920,0
+}
+
+profile home_monitor {
+  output "BOE 0x0791 Unknown" enable mode 1920x1080 position 1920,0
+  output "LG Electronics LG HDR 4K 0x0005C16E" mode 3840x2160 position 0,0 scale 2.0
+}
