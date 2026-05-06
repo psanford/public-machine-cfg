@@ -110,6 +110,11 @@
   (interactive)
   (insert (pms-chomp (shell-command-to-string "uuidgen"))))
 
+(defun pms-random-hex ()
+  "Insert a random hex number"
+  (interactive)
+  (insert (format "%x" (random (expt 16 8)))))
+
 (defvar pms-names-cache-file "~/.emacs.d/first-names.txt"
   "File path for cached names list.")
 
