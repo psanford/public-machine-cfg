@@ -1,0 +1,98 @@
+#!/bin/sh
+# Diagnose why mako notifications are not appearing under river/weir.
+# Run from a terminal INSIDE the session while notifications are broken.
+# Read-only except for sending test notifications and (optionally, with
+# --restart-mako / --restart-weir) restarting those daemons to bisect.
+#
+# The decision tree:
+#   notification listed by mako but not visible  -> compositor side (river/weir)
+#   notification not listed by mako              -> dbus/mako side
+#   restart mako fixes it                        -> mako internal state bug
+#   restart mako does not fix, restart weir does -> weir bug
+#   neither fixes it                             -> river bug
+
+set -u
+mode="${1:-check}"
+
+say() { printf '%s\n' "$*"; }
+hr()  { say "-----------------------------------------------------------"; }
+
+say "##### mako process #####"
+pid=$(pgrep -x mako | head -1)
+if [ -z "$pid" ]; then
+    say "VERDICT: mako is NOT RUNNING. Start it and re-test."
+    exit 0
+fi
+say "mako pid $pid, started $(ps -o lstart= -p "$pid"), args: $(ps -o args= -p "$pid")"
+
+say
+say "##### mako state #####"
+say "modes active:    $(makoctl mode | tr '\n' ' ')"
+say "currently shown: $(makoctl list | grep -c '^Notification' || echo 0)"
+hist_count=$(makoctl history | grep -c '^Notification' || echo 0)
+say "in history:      $hist_count"
+
+say
+say "##### test notification #####"
+marker="diag-$(date +%s)"
+notify-send -a diag "$marker" "diagnostic test notification"
+sleep 1
+listed=$(makoctl list | grep -c "$marker" || true)
+say "sent '$marker'; mako lists it: $listed"
+say
+say ">>> LOOK AT YOUR SCREEN NOW. Is the test notification visible? <<<"
+say
+
+say "##### compositor-side surface evidence #####"
+# river logs layer surface map/unmap at debug level; check both common log
+# locations. This only works if river is running with -log-level debug.
+for log in "$HOME/.local/share/sddm/wayland-session.log" "$HOME/.cache/river-session.log"; do
+    [ -r "$log" ] || continue
+    recent=$(grep -a "layer surface 'notifications'" "$log" | tail -4)
+    if [ -n "$recent" ]; then
+        say "from $log:"
+        say "$recent"
+    fi
+done
+say "(no 'layer surface' lines = river is not logging at debug level;"
+say " add -log-level debug to river's Exec for the full picture)"
+
+say
+hr
+say "INTERPRETATION"
+hr
+if [ "$listed" -ge 1 ]; then
+    say "mako ACCEPTED the notification and believes it is displayed."
+    say "If you cannot see it on screen, the failure is compositor-side."
+    say "Next steps, in order:"
+    say "  1. $0 --restart-mako   (if this fixes it: mako surface-state bug)"
+    say "  2. $0 --restart-weir   (if this fixes it: weir bug -- send Peter the weir log)"
+    say "  3. If neither fixes it: river bug -- capture river debug log"
+else
+    say "mako did NOT register the notification: the problem is on the"
+    say "dbus/mako side, not the compositor. Check:"
+    say "  - is another notification daemon fighting for the dbus name?"
+    say "    busctl --user status org.freedesktop.Notifications | head -3"
+    say "  - did mako hit its history limit? makoctl history | head"
+fi
+
+case "$mode" in
+--restart-mako)
+    say; say "Restarting mako..."
+    kill "$pid"; sleep 0.5
+    (mako >/dev/null 2>&1 &)
+    sleep 1
+    notify-send -a diag "after-mako-restart" "did this appear?"
+    say "Sent 'after-mako-restart'. Visible?  yes -> mako bug captured above."
+    ;;
+--restart-weir)
+    say; say "Restarting weir (windows will freeze ~1s, your session survives)..."
+    pkill -x weir; sleep 1
+    (weir >/dev/null 2>&1 &)
+    weirctl wait-for-socket
+    [ -r "$HOME/.config/river/weir.conf" ] && . "$HOME/.config/river/weir.conf"
+    sleep 1
+    notify-send -a diag "after-weir-restart" "did this appear?"
+    say "Sent 'after-weir-restart'. Visible?  yes -> weir bug; grab the old weir log NOW."
+    ;;
+esac
