@@ -1,8 +1,10 @@
 profile {
   output eDP-1 enable mode 2560x1664 position 0,0 scale 1.5
+  exec makoctl reload
 }
 
 profile home_monitor {
   output "LG Electronics LG HDR 4K 0x0005C16E" mode 3840x2160 position 0,0 scale 2.0
   output eDP-1 enable mode 2560x1664 position 1920,0 scale 1.5
+  exec makoctl reload
 }

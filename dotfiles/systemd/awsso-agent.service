@@ -1,8 +1,10 @@
 [Unit]
 Description=Awsso agent server
+After=graphical-session.target
+PartOf=graphical-session.target
 
 [Service]
 ExecStart=/home/psanford/bin/awsso server
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical-session.target
