@@ -167,6 +167,8 @@ dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
 # needed for systemd services like awsso-agent
 systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
+# trigger 'graphical-session.target' for systemd user units waiting for it
+systemctl --user start graphical-session.target
 
 waybar &
 gnome-keyring-daemon &
