@@ -174,4 +174,4 @@ swayidle -w &
 pasystray &
 nm-applet &
 blueman-applet &
-mako &
+dunst &
