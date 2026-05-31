@@ -1,0 +1,34 @@
+[global]
+    sort = yes
+    layer = overlay
+    width = 300
+    height = 110
+    origin = top-right
+    offset = 10x50
+    frame_width = 2
+    frame_color = "#88c0d0"
+    corner_radius = 15
+    max_icon_size = 64
+    font = monospace 10
+
+[urgency_low]
+    background = "#f0e69e"
+    foreground = "#000000"
+    frame_color = "#cccccc"
+    timeout = 5
+
+[urgency_normal]
+    background = "#f0e69e"
+    foreground = "#000000"
+    frame_color = "#d08770"
+    timeout = 5
+
+[urgency_critical]
+    background = "#f0e69e"
+    foreground = "#000000"
+    frame_color = "#bf616a"
+    timeout = 5
+
+[mpd]
+    category = mpd
+    timeout = 2
