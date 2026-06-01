@@ -5,7 +5,7 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["idle_inhibitor", "custom/media", "hyprland/workspaces", "river/tags", "backlight"],
+    "modules-left": ["idle_inhibitor", "custom/media", "backlight", "custom/weir"],
     "modules-center": ["sway/window"],
     "modules-right": [  "battery",  "pulseaudio", "custom/pipewire",  "network", "clock", "tray"],
     "idle_inhibitor": {
@@ -123,6 +123,12 @@
       "set-tags": [
         1,2,4,8,16,32,64,128,256,512
        ]
+    },
+    "custom/weir": {
+      "exec": "weir-workspaces",
+      "return-type": "json",
+      "escape": false,
+      "tooltip": true
     },
     "custom/media": {
         "format": "{icon} {}",
