@@ -1,0 +1,37 @@
+#!/bin/sh
+# Stream weir workspace state as a JSON array for eww's `for` widget.
+# One line per state change:
+#   [{"name":"1","class":"focused"},{"name":"2","class":"occupied"},...]
+# Reconnects if weir restarts. Requires weirctl and jq on PATH.
+set -u
+
+err() { printf '[{"name":"weir: %s","class":"error"}]\n' "$1"; }
+
+for dep in weirctl jq; do
+    command -v "$dep" >/dev/null 2>&1 || { err "$dep not found"; exit 1; }
+done
+
+while :; do
+    weirctl subscribe | jq --unbuffered -c '
+        .state as $s
+        | ($s.outputs // [] | map(select(.focused)) | first | .workspace // ""
+            | split("@")[0]) as $cur
+        | ($s.workspaces // []
+            | group_by(.name | split("@")[0])
+            | map({
+                name: (.[0].name | split("@")[0]),
+                occupied: ((map((.windows // []) | length) | add // 0) > 0),
+                visible: (map(.visible) | any)
+              })
+            | sort_by(.name | tonumber? // 999)) as $all
+        | $all | map({
+            name,
+            class: (if .name == $cur then "focused"
+                    elif .visible then "visible"
+                    elif .occupied then "occupied"
+                    else "empty" end)
+          })
+    '
+    err "not connected"
+    sleep 2
+done

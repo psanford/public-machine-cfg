@@ -1,0 +1,44 @@
+// Matches the dark + purple theme from the user's waybar style.
+
+* {
+  all: unset;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.bar {
+  background-color: rgba(0, 0, 0, 0.87);
+  color: #bbc2cf;
+  padding: 0 6px;
+}
+
+.workspaces { margin: 2px 0; }
+.ws {
+  padding: 0 10px;
+  margin: 2px 1px;
+  border-radius: 4px;
+  color: #888888;
+}
+.ws.focused  { background-color: #5f27cd; color: #ffffff; }
+.ws.visible  { background-color: #2b125d; color: #bbc2cf; }
+.ws.occupied { color: #ffffff; }
+.ws.error    { color: #ff5555; }
+.ws:hover    { background-color: #2b125d; }
+
+.clock { font-weight: bold; color: #bbc2cf; }
+
+.vol-mute { padding: 0 4px; }
+.vol-slider {
+  min-width: 90px;
+  trough {
+    background-color: #333333;
+    border-radius: 4px;
+    min-height: 6px;
+    min-width: 90px;
+    highlight { background-color: #5f27cd; border-radius: 4px; }
+  }
+}
+
+.wifi, .bluetooth, .battery { padding: 0 4px; }
+.bluetooth.off { color: #666666; }
+.battery.critical { color: #ff5555; }

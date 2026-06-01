@@ -1,0 +1,77 @@
+;; eww status bar for weir (https://github.com/psanford/weir)
+;;
+;; Layout:  [workspaces]        [clock]        [volume][wifi][bt][battery][tray]
+;; All scripts degrade gracefully when a backing service is missing.
+
+;; ---------------------------------------------------------------------------
+;; data sources
+;; ---------------------------------------------------------------------------
+
+(deflisten ws-state :initial "[]"
+  "scripts/weir-workspaces-json")
+
+(defpoll time     :interval "10s" "date '+%a %m-%d %H:%M'")
+(defpoll volume   :interval "2s"  :initial "0" "scripts/volume")
+(defpoll battery  :interval "30s" :initial '{"present":false,"capacity":0,"status":"none"}' "scripts/battery")
+(defpoll wifi     :interval "10s" :initial '{"ssid":"","signal":0}' "scripts/wifi")
+(defpoll bt       :interval "10s" :initial '{"powered":"off","connected":0}' "scripts/bluetooth")
+
+;; ---------------------------------------------------------------------------
+;; widgets
+;; ---------------------------------------------------------------------------
+
+(defwidget workspaces []
+  (box :class "workspaces" :orientation "h" :space-evenly false :halign "start"
+    (for ws in ws-state
+      (button :class "ws ${ws.class}"
+              :onclick "weirctl view ${ws.name}"
+        "${ws.name}"))))
+
+(defwidget volume-control []
+  (box :class "volume" :orientation "h" :space-evenly false :spacing 4
+    (button :class "vol-mute"
+            :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+      {volume == "muted" ? "muted" : "vol"})
+    (scale :class "vol-slider"
+           :min 0 :max 101
+           :value {volume == "muted" || volume == "" ? 0 : volume}
+           :onchange "wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ {}%")))
+
+(defwidget wifi-widget []
+  (button :class "wifi" :onclick "nm-connection-editor &"
+    {wifi.ssid != "" ? "${wifi.ssid} ${wifi.signal}%" : "no wifi"}))
+
+(defwidget bt-widget []
+  (button :class "bluetooth ${bt.powered}" :onclick "blueman-manager &"
+    {bt.connected > 0 ? "bt:${bt.connected}" : "bt"}))
+
+(defwidget battery-widget []
+  (box :class "battery ${battery.capacity < 20 && battery.status != 'Charging' ? 'critical' : ''}"
+       :visible {battery.present}
+    "${battery.capacity}%${battery.status == 'Charging' ? '+' : ''}"))
+
+(defwidget clock-widget []
+  (label :class "clock" :text time))
+
+;; ---------------------------------------------------------------------------
+;; the bar
+;; ---------------------------------------------------------------------------
+
+(defwidget bar-layout []
+  (centerbox :orientation "h" :class "bar"
+    (workspaces)
+    (clock-widget)
+    (box :halign "end" :space-evenly false :spacing 10
+      (volume-control)
+      (wifi-widget)
+      (bt-widget)
+      (battery-widget)
+      (systray :spacing 4 :icon-size 16))))
+
+(defwindow bar
+  :monitor 0
+  :geometry (geometry :x "0%" :y "0px" :width "100%" :height "32px" :anchor "top center")
+  :stacking "fg"
+  :exclusive true
+  :namespace "eww-bar"
+  (bar-layout))

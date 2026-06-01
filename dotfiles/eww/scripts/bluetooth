@@ -1,0 +1,6 @@
+#!/bin/sh
+# JSON: {"powered":"on","connected":2}
+command -v bluetoothctl >/dev/null 2>&1 || { echo '{"powered":"off","connected":0}'; exit 0; }
+if bluetoothctl show 2>/dev/null | grep -q "Powered: yes"; then powered=on; else powered=off; fi
+connected=$(bluetoothctl devices Connected 2>/dev/null | grep -c "^Device")
+printf '{"powered":"%s","connected":%s}\n' "$powered" "${connected:-0}"
