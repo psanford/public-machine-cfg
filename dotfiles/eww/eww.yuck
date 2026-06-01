@@ -52,7 +52,12 @@
     "${battery.capacity}%${battery.status == 'Charging' ? '+' : ''}"))
 
 (defwidget clock-widget []
-  (label :class "clock" :text time))
+  (button :class "clock" :onclick "eww open --toggle calendar"
+    time))
+
+(defwidget calendar-widget []
+  (box :class "calendar-box" :orientation "v"
+    (calendar :class "cal")))
 
 ;; ---------------------------------------------------------------------------
 ;; the bar
@@ -77,3 +82,10 @@
   :exclusive true
   :namespace "eww-bar"
   (bar-layout))
+
+(defwindow calendar
+  :monitor 0
+  :geometry (geometry :x "8px" :y "36px" :anchor "top right")
+  :stacking "fg"
+  :namespace "eww-calendar"
+  (calendar-widget))

@@ -2,7 +2,8 @@
 
 A complete [eww](https://github.com/elkowar/eww) bar with weir workspace
 integration: clickable per-workspace buttons, a volume slider, battery,
-clock, wifi, bluetooth, and a system tray.
+clock (click to toggle a calendar popup), wifi, bluetooth, and a system
+tray.
 
 ```
 [1][2][3]...                    [vol ====] wifi bt 87% [tray] Mon 06-01 14:32

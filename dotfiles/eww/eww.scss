@@ -25,7 +25,23 @@
 .ws.error    { color: #ff5555; }
 .ws:hover    { background-color: #2b125d; }
 
-.clock { font-weight: bold; color: #bbc2cf; }
+.clock { font-weight: bold; color: #bbc2cf; padding: 0 6px; }
+.clock:hover { background-color: #2b125d; border-radius: 4px; }
+
+.calendar-box {
+  background-color: rgba(0, 0, 0, 0.92);
+  color: #bbc2cf;
+  padding: 8px;
+  border: 1px solid #5f27cd;
+  border-radius: 6px;
+}
+.cal {
+  font-family: monospace;
+  font-size: 14px;
+  padding: 4px;
+  &.highlight { background-color: #5f27cd; color: #ffffff; }
+  :selected { background-color: #5f27cd; color: #ffffff; }
+}
 
 .vol-mute { padding: 0 4px; }
 .vol-slider {
