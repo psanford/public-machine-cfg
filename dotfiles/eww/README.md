@@ -19,11 +19,21 @@ rendering, exclusive zone, and live workspace updates verified).
 - eww >= 0.6 (the systray widget requires 0.6)
 - `weirctl` and `jq` (workspaces)
 - `wpctl` / wireplumber (volume)
+- `pactl` (pkgs.pulseaudio CLI) — for event-driven volume updates; without
+  it the volume falls back to 10s polling
 - `nmcli` / NetworkManager (wifi) — optional, widget shows "no wifi" without it
 - `bluetoothctl` / bluez (bluetooth) — optional
-- A session dbus (for the systray); standard on any real system
+- A session dbus (for the systray and bluetooth events)
 
 Every script degrades gracefully when its backing service is missing.
+
+## Power usage
+
+All data sources are event-driven (`deflisten` on pactl/nmcli/bluez/weirctl
+streams) rather than polled: at idle the bar causes ~3.5 process wakeups per
+minute (the once-a-minute clock and battery reads, plus slow refresh ticks)
+instead of the ~50/min a naive polling setup costs. Volume, wifi, bluetooth,
+and workspace changes appear instantly rather than on the next poll.
 
 
 ## Customizing
@@ -49,6 +59,4 @@ JSON arrays (one per state change):
 
 eww's `deflisten` feeds that to a `for` loop that renders one button per
 workspace with the class as its CSS class — focused / visible / occupied /
-empty. Clicking a button runs `weirctl view <name>`. This is the same
-pattern as contrib/waybar but without the one-module-per-workspace
-limitation.
+empty. Clicking a button runs `weirctl view <name>`.

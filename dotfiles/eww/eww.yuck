@@ -11,11 +11,15 @@
 (deflisten ws-state :initial "[]"
   "scripts/weir-workspaces-json")
 
-(defpoll time     :interval "10s" "date '+%a %m-%d %H:%M'")
-(defpoll volume   :interval "2s"  :initial "0" "scripts/volume")
-(defpoll battery  :interval "30s" :initial '{"present":false,"capacity":0,"status":"none"}' "scripts/battery")
-(defpoll wifi     :interval "10s" :initial '{"ssid":"","signal":0}' "scripts/wifi")
-(defpoll bt       :interval "10s" :initial '{"powered":"off","connected":0}' "scripts/bluetooth")
+;; Event-driven listeners: zero wakeups at idle except the once-a-minute
+;; clock and battery reads (~3.5 wakeups/min total vs ~50/min with polling).
+(deflisten time   :initial "..." "scripts/clock-listener")
+(deflisten volume :initial "0" "scripts/volume-listener")
+(deflisten wifi   :initial '{"ssid":"","signal":0}' "scripts/wifi-listener")
+(deflisten bt     :initial '{"powered":"off","connected":0}' "scripts/bluetooth-listener")
+;; Battery stays a poll: a sysfs read once a minute is effectively free and
+;; sysfs has no events to listen for.
+(defpoll battery  :interval "60s" :initial '{"present":false,"capacity":0,"status":"none"}' "scripts/battery")
 
 ;; ---------------------------------------------------------------------------
 ;; widgets

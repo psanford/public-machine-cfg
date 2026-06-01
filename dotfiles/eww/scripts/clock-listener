@@ -1,0 +1,7 @@
+#!/bin/sh
+# Emit the time once per minute, aligned to the minute boundary.
+# One wakeup per minute instead of polling every N seconds.
+while :; do
+    date '+%a %m-%d %H:%M'
+    sleep $((60 - $(date +%-S)))
+done

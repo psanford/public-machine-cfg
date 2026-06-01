@@ -1,0 +1,22 @@
+#!/bin/sh
+# Kill the whole process group on exit so background helpers (monitors,
+# tick loops) never outlive this script when eww reloads or restarts.
+trap 'trap - TERM; kill 0' INT TERM EXIT
+# Stream wifi state as JSON: {"ssid":"...","signal":85}
+# Event-driven via `nmcli monitor` (instant on connect/disconnect) merged
+# with a 60s tick so the signal strength stays fresh. --rescan no ensures
+# reading the state never triggers a power-hungry wifi scan.
+get() {
+    line=$(nmcli -t -f active,ssid,signal dev wifi list --rescan no 2>/dev/null | grep '^yes:' | head -1)
+    if [ -n "$line" ]; then
+        printf '{"ssid":"%s","signal":%s}\n' \
+            "$(echo "$line" | cut -d: -f2)" \
+            "$(echo "$line" | cut -d: -f3 | grep -E '^[0-9]+$' || echo 0)"
+    else
+        echo '{"ssid":"","signal":0}'
+    fi
+}
+command -v nmcli >/dev/null 2>&1 || { echo '{"ssid":"","signal":0}'; exit 0; }
+get
+( nmcli monitor 2>/dev/null & while :; do sleep 60; echo tick; done ) \
+    | while read -r _; do get; done

@@ -1,0 +1,26 @@
+#!/bin/sh
+# Kill the whole process group on exit so background helpers (monitors,
+# tick loops) never outlive this script when eww reloads or restarts.
+trap 'trap - TERM; kill 0' INT TERM EXIT
+# Stream the default sink volume: "muted" or 0-100.
+# Event-driven via `pactl subscribe` (pipewire-pulse); zero wakeups at idle.
+# Falls back to 10s polling if pactl is unavailable.
+get() {
+    out=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null) || { echo 0; return; }
+    case "$out" in
+    *MUTED*) echo muted ;;
+    *) echo "$out" | awk '{printf "%d\n", $2*100}' ;;
+    esac
+}
+get
+while :; do
+    if command -v pactl >/dev/null 2>&1; then
+        pactl subscribe 2>/dev/null \
+            | grep --line-buffered "'change' on sink" \
+            | while read -r _; do get; done
+    fi
+    # pactl missing or the connection died: poll slowly, then retry the
+    # subscription (pipewire may have restarted).
+    sleep 10
+    get
+done
