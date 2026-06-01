@@ -5,8 +5,10 @@ integration: clickable per-workspace buttons, a volume slider, battery,
 clock, wifi, bluetooth, and a system tray.
 
 ```
-[1][2][3]...          Mon 06-01 14:32          [vol ====] wifi bt 87% [tray]
+[1][2][3]...                    [vol ====] wifi bt 87% [tray] Mon 06-01 14:32
 ```
+
+The center is intentionally left empty to avoid laptop display notches.
 
 Tested against eww 0.6.0 + river 0.4.5 + weir (headless CI harness:
 rendering, exclusive zone, and live workspace updates verified).
@@ -22,23 +24,6 @@ rendering, exclusive zone, and live workspace updates verified).
 
 Every script degrades gracefully when its backing service is missing.
 
-## Install
-
-```sh
-cp -r contrib/eww ~/.config/eww
-```
-
-In `~/.config/river/init`, replace `waybar &` with:
-
-```sh
-eww daemon
-until eww ping >/dev/null 2>&1; do sleep 0.1; done
-eww open bar
-```
-
-PATH note: eww and its scripts inherit the init script's environment, which
-does not source your shell rc files. If weirctl lives in ~/go/bin, make sure
-the init script exports `PATH="$HOME/go/bin:$PATH"` before starting eww.
 
 ## Customizing
 

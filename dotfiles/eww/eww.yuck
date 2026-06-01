@@ -1,6 +1,7 @@
 ;; eww status bar for weir (https://github.com/psanford/weir)
 ;;
-;; Layout:  [workspaces]        [clock]        [volume][wifi][bt][battery][tray]
+;; Layout:  [workspaces]                [volume][wifi][bt][battery][tray][clock]
+;; Center is intentionally empty to avoid the laptop notch.
 ;; All scripts degrade gracefully when a backing service is missing.
 
 ;; ---------------------------------------------------------------------------
@@ -58,15 +59,16 @@
 ;; ---------------------------------------------------------------------------
 
 (defwidget bar-layout []
-  (centerbox :orientation "h" :class "bar"
-    (workspaces)
-    (clock-widget)
+  (box :orientation "h" :class "bar" :space-evenly false
+    (box :halign "start" :space-evenly false :spacing 10 :hexpand true
+      (workspaces))
     (box :halign "end" :space-evenly false :spacing 10
       (volume-control)
       (wifi-widget)
       (bt-widget)
       (battery-widget)
-      (systray :spacing 4 :icon-size 16))))
+      (systray :spacing 4 :icon-size 16)
+      (clock-widget))))
 
 (defwindow bar
   :monitor 0
