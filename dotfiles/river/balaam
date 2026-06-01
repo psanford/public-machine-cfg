@@ -1,4 +1,5 @@
-riverctl keyboard-layout -options altwin:swap_lalt_lwin,caps:super us
+weirctl keyboard-layout -options caps:super us
+weirctl  keyboard-layout -device 'Apple MTP keyboard' -options altwin:swap_lalt_lwin,caps:super us
 
 wlr-randr --output eDP-1 --scale 1.5
 

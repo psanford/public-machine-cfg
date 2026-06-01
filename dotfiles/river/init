@@ -65,13 +65,9 @@ weirctl bind Control+Alt+Backspace exit
 
 weirctl bind Control+Alt+l spawn "swaylock --daemonize --show-failed-attempts --indicator-idle-visible  --color 121b26 -t"
 
-
-
 # --- pointer bindings -------------------------------------------------------
 weirctl bind-pointer $mod+Left  move
 weirctl bind-pointer $mod+Right resize
-
-weirctl  keyboard-layout -options altwin:swap_lalt_lwin,caps:super us
 
 weirctl  input 'Apple MTP multi-touch' natural-scroll disabled
 

@@ -1,4 +1,4 @@
-riverctl keyboard-layout -options caps:super us
+weirctl keyboard-layout -options caps:super us
 
 # enable trackpad tap
 riverctl input pointer-1267-32-Elan_Touchpad tap enabled
