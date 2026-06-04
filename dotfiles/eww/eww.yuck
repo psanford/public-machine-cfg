@@ -53,7 +53,7 @@
 (defwidget battery-widget []
   (box :class "battery ${battery.capacity < 20 && battery.status != 'Charging' ? 'critical' : ''}"
        :visible {battery.present}
-    "${battery.capacity}%${battery.status == 'Charging' ? '+' : ''}"))
+    "${battery.status == 'Charging' ? '⚡' : ''}${battery.capacity >= 80 ? '█' : battery.capacity >= 60 ? '▇' : battery.capacity >= 40 ? '▅' : battery.capacity >= 20 ? '▃' : '▁'} ${battery.capacity}%"))
 
 (defwidget clock-widget []
   (button :class "clock" :onclick "eww open --toggle calendar"
