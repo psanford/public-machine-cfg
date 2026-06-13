@@ -58,3 +58,21 @@
 .wifi, .bluetooth, .battery { padding: 0 4px; }
 .bluetooth.off { color: #666666; }
 .battery.critical { color: #ff5555; }
+
+// Native GTK popup menus (e.g. system tray right-click menus). The global
+// `* { all: unset; }` above strips their default background, so restore one
+// here or they render transparent and unreadable.
+menu, .menu, .popup, popover {
+  background-color: rgba(0, 0, 0, 0.92);
+  color: #bbc2cf;
+  border: 1px solid #5f27cd;
+  border-radius: 6px;
+  padding: 4px;
+}
+menuitem {
+  padding: 4px 10px;
+  border-radius: 4px;
+  &:hover { background-color: #5f27cd; color: #ffffff; }
+  &:disabled { color: #666666; }
+}
+separator { background-color: #333333; min-height: 1px; margin: 4px 0; }
