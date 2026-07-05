@@ -13,7 +13,7 @@ weirctl wait-for-socket
 weirctl set border-width 2
 weirctl set border-color-focused   0x93a1a1
 weirctl set border-color-unfocused 0x586e75
-weirctl set gaps 2 2
+#weirctl set gaps 2 2
 #weirctl set smart-gaps on
 
 # --- layout -----------------------------------------------------------------

@@ -1,0 +1,28 @@
+#!/bin/sh
+# Kill the whole process group on exit so background helpers (monitors,
+# tick loops) never outlive this script when eww reloads or restarts.
+trap 'trap - TERM; kill 0' INT TERM EXIT
+# Stream battery state as JSON: {"present":true,"capacity":85,"status":"Charging"}
+# Reads sysfs directly so it works with any battery name (BAT0, BAT1,
+# macsmc-battery on Apple Silicon, ...). A 60s tick keeps the reading fresh,
+# with instant refreshes on top of it:
+#   - logind PrepareForSleep(false)  -> resume from sleep
+#   - power_supply uevents           -> AC plug/unplug, charge state changes
+get() {
+    for cap in /sys/class/power_supply/*/capacity; do
+        [ -r "$cap" ] || continue
+        dir=$(dirname "$cap")
+        printf '{"present":true,"capacity":%s,"status":"%s"}\n' \
+            "$(cat "$cap")" "$(cat "$dir/status" 2>/dev/null || echo Unknown)"
+        return
+    done
+    echo '{"present":false,"capacity":0,"status":"none"}'
+}
+get
+( command -v dbus-monitor >/dev/null 2>&1 && \
+      dbus-monitor --system "type='signal',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'" 2>/dev/null &
+  command -v udevadm >/dev/null 2>&1 && \
+      stdbuf -oL udevadm monitor -u -s power_supply 2>/dev/null &
+  while :; do sleep 60; echo tick; done ) \
+    | grep --line-buffered -E 'tick|boolean false|^UDEV +\[' \
+    | while read -r _; do get; done

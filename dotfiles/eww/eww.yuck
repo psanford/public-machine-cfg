@@ -17,9 +17,10 @@
 (deflisten volume :initial "0" "scripts/volume-listener")
 (deflisten wifi   :initial '{"ssid":"","signal":0}' "scripts/wifi-listener")
 (deflisten bt     :initial '{"powered":"off","connected":0}' "scripts/bluetooth-listener")
-;; Battery stays a poll: a sysfs read once a minute is effectively free and
-;; sysfs has no events to listen for.
-(defpoll battery  :interval "60s" :initial '{"present":false,"capacity":0,"status":"none"}' "scripts/battery")
+;; Battery keeps its once-a-minute sysfs read but also refreshes instantly
+;; on resume from sleep (logind PrepareForSleep) and on AC plug/unplug
+;; (power_supply uevents).
+(deflisten battery :initial '{"present":false,"capacity":0,"status":"none"}' "scripts/battery-listener")
 
 ;; ---------------------------------------------------------------------------
 ;; widgets
