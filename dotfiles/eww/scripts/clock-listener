@@ -1,7 +1,14 @@
 #!/bin/sh
+# Kill the whole process group on exit so background helpers never
+# outlive this script when eww reloads or restarts.
+trap 'trap - TERM; kill 0' INT TERM EXIT
 # Emit the time once per minute, aligned to the minute boundary.
 # One wakeup per minute instead of polling every N seconds.
-while :; do
-    date '+%a %m-%d %H:%M'
-    sleep $((60 - $(date +%-S)))
-done
+# sleep doesn't advance across suspend, so also refresh instantly on
+# resume from sleep (logind PrepareForSleep(false)) instead of waiting
+# out the stale sleep (up to a minute of wrong time).
+( command -v dbus-monitor >/dev/null 2>&1 && \
+      dbus-monitor --system "type='signal',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'" 2>/dev/null &
+  while :; do echo tick; sleep $((60 - $(date +%-S))); done ) \
+    | grep --line-buffered -E 'tick|boolean false' \
+    | while read -r _; do date '+%a %m-%d %H:%M'; done
