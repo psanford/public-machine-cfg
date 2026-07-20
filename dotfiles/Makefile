@@ -132,7 +132,15 @@ $(HOME)/.config/systemd/user/%: systemd/%
 	systemctl --user enable $(@F)
 	systemctl --user start $(@F)
 
-systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles))
+# river-session.target has no [Install] section; river's init starts it
+$(HOME)/.config/systemd/user/river-session.target: systemd/river-session.target
+	mkdir -p $(@D)
+	cp $< $@.tmp
+	mv -f $@.tmp $@
+	chmod 444 $@
+	systemctl --user daemon-reload
+
+systemd: $(patsubst %,$(HOME)/.config/systemd/user/%, $(_systemdfiles)) $(HOME)/.config/systemd/user/river-session.target
 
 # https://blog.jgc.org/2015/04/the-one-line-you-should-add-to-every.html
 print-%: ; @echo $* is $($*)

@@ -163,8 +163,9 @@ dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
 # needed for systemd services like awsso-agent
 systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
-# trigger 'graphical-session.target' for systemd user units waiting for it
-systemctl --user start graphical-session.target
+# pull up 'graphical-session.target' for systemd user units waiting for it.
+# it refuses manual start, so go through river-session.target which BindsTo it
+systemctl --user start river-session.target
 
 eww daemon
 until eww ping >/dev/null 2>&1; do sleep 0.1; done
