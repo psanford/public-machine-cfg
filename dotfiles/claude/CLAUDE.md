@@ -1,6 +1,9 @@
 # General instructions
 - Don't comment code unless a comment is truly warranted
 
+# Git
+- Commit messages: subject line <= 50 characters, then a blank line, then the body wrapped at <= 70 characters per line
+
 # Go projects
 - Run go build to ensure the code can build
 - Run go test if there are tests in the project
