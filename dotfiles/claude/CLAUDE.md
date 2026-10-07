@@ -1,5 +1,6 @@
 # General instructions
 - Don't comment code unless a comment is truly warranted
+- Don't create cloud based artifacts or claude.ai docs unless the human specifically asks for it
 
 # Git
 - Commit messages: subject line <= 50 characters, then a blank line, then the body wrapped at <= 70 characters per line
