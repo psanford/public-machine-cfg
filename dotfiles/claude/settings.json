@@ -1,18 +1,5 @@
 {
-  "model": "sonnet",
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/psanford/bin/codefmt-claude"
-          }
-        ]
-      }
-    ]
-  },
+  "attribution": false,
   "env": {
     "USE_BUILTIN_RIPGREP": "0"
   }
