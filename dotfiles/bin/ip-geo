@@ -1,8 +1,11 @@
 #!/usr/bin/env sh
 
-if [ -z "$@" ]; then
+if [ $# -ne 1 ]; then
   echo "usage: $0 <ip>"
   exit 1
 fi
 
-curl -q http://ip-api.com/line/$@
+# Refang: 1.2.3[.]4 -> 1.2.3.4, 2001:db8[:]1 -> 2001:db8:1
+ip=$(printf '%s' "$1" | sed 's/\[\.\]/./g; s/\[:\]/:/g')
+
+curl -q "http://ip-api.com/line/$ip"
