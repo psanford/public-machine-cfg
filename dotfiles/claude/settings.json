@@ -1,5 +1,8 @@
 {
-  "attribution": false,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "env": {
     "USE_BUILTIN_RIPGREP": "0"
   }
